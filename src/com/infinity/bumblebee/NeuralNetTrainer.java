@@ -1,6 +1,7 @@
 package com.infinity.bumblebee;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,7 +34,6 @@ public class NeuralNetTrainer {
 			RealMatrix theta = MatrixUtils.createRealMatrix(layers[i+1], layers[i] + 1);
 			thetas.add(theta);
 		}
-
 	}
 	
 	public NeuralNetTrainer(List<RealMatrix> thetas) {
@@ -80,9 +80,14 @@ public class NeuralNetTrainer {
 	 * Computes the cost of the network
 	 * @param X The training data
 	 * @param y The desired labels for the training data
+	 * @param numLabels The number of distinct labels for the training data
 	 * @return The cost of the network for the given training and label data
 	 */
-	protected double calculateCost(RealMatrix X, RealMatrix y) {
+	protected double calculateCost(RealMatrix X, RealMatrix y, int numLabels) {
+		// nnCostFunction.m from mlclass-ex4-005
+		
+		int m = X.getRowDimension();
+		
 		System.out.println("X: " + X.getRowDimension() + "x" + X.getColumnDimension());
 		BumbleMatrixUtils bumbleMatrixUtils = new BumbleMatrixUtils();
 		
@@ -103,8 +108,22 @@ public class NeuralNetTrainer {
 			}
 		}
 		
+		final RealMatrix hTheta = a; // hTheta is the last z in the calculations
+		
 		System.out.println("------------------------");
-		System.out.println("a: " + a.getRowDimension() + "x" + a.getColumnDimension());
+		System.out.println("hTheta: " + hTheta.getRowDimension() + "x" + hTheta.getColumnDimension());
+		
+		double[][] ykData = new double[m][numLabels];
+		// fill it with 0's
+		for (double[] ds : ykData) {
+			Arrays.fill(ds, 0);
+		}
+		// set the value from the original y into the yk's indexed element
+		for (int i = 0; i < y.getRowDimension(); i++) {
+			int val = (int) y.getRow(i)[0];
+			ykData[val][0] = 1.0; 
+		}
+//		RealMatrix yk = MatrixUtils.createRealMatrix(m, numLabels);
 		
 		return 0;
 	}

@@ -60,13 +60,19 @@ public class NeuralNetTrainerTest {
 		RealMatrix theta2 = reader.getMatrixFromFile("./test-data/Theta2.csv");
 		RealMatrix X = reader.getMatrixFromFile("./test-data/X.csv");
 		RealMatrix y = reader.getMatrixFromFile("./test-data/y.csv");
+		
+		// original y was coded from 1-10 and we need to make it 0-9
+		for (int i = 0; i < y.getRowDimension(); i++) {
+			double val = y.getRow(i)[0]-1;
+			y.setEntry(i, 0, val);
+		}
 
 		List<RealMatrix> thetas = new ArrayList<RealMatrix>();
 		thetas.add(theta1);
 		thetas.add(theta2);
 		
 		NeuralNetTrainer cut = new NeuralNetTrainer(thetas);
-		double cost = cut.calculateCost(X, y);
+		double cost = cut.calculateCost(X, y, 10);
 		
 		assertThat(cost, is(equalTo(0.287629)));
 	}
