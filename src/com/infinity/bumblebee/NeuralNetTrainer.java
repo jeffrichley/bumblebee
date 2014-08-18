@@ -1,10 +1,13 @@
 package com.infinity.bumblebee;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+
+import com.infinity.bumblebee.util.BumbleMatrixUtils;
 
 /**
  * Takes a definition of a Neural Network and trains the Theta values to 
@@ -20,12 +23,8 @@ public class NeuralNetTrainer {
 	private final Function function = new SigmoidFunction();
 	
 	public NeuralNetTrainer(int... layers) {
-		this(new ArrayList<RealMatrix>(), layers);
-	}
-	
-	public NeuralNetTrainer(List<RealMatrix> thetas, int... layers) {
-		this.thetas = thetas;
-
+		this.thetas = new ArrayList<RealMatrix>();
+		
 		// we need to make a Theta parameter between each layer
 		// which comes up to one less that the number of layers
 		for (int i = 0; i < layers.length - 1; i++) {
@@ -34,6 +33,12 @@ public class NeuralNetTrainer {
 			RealMatrix theta = MatrixUtils.createRealMatrix(layers[i+1], layers[i] + 1);
 			thetas.add(theta);
 		}
+
+	}
+	
+	public NeuralNetTrainer(List<RealMatrix> thetas) {
+		this.thetas = thetas;
+
 	}
 
 	/**
@@ -71,7 +76,36 @@ public class NeuralNetTrainer {
 		return lambda;
 	}
 
-	public double calculateCost(RealMatrix x, RealMatrix y) {
+	/**
+	 * Computes the cost of the network
+	 * @param X The training data
+	 * @param y The desired labels for the training data
+	 * @return The cost of the network for the given training and label data
+	 */
+	protected double calculateCost(RealMatrix X, RealMatrix y) {
+		System.out.println("X: " + X.getRowDimension() + "x" + X.getColumnDimension());
+		BumbleMatrixUtils bumbleMatrixUtils = new BumbleMatrixUtils();
+		
+		RealMatrix a = bumbleMatrixUtils.onesColumnAdded(X);
+		
+		Iterator<RealMatrix> iter = thetas.iterator();
+		while (iter.hasNext()) {
+			System.out.println("------------------------");
+			RealMatrix theta = iter.next();
+			
+			System.out.println("a: " + a.getRowDimension() + "x" + a.getColumnDimension());
+			System.out.println("Theta: " + theta.getRowDimension() + "x" + theta.getColumnDimension());
+			
+			a = function.calculate(theta.multiply(a.transpose()));
+			
+			if (iter.hasNext()) {
+				a = bumbleMatrixUtils.onesColumnAdded(a.transpose());
+			}
+		}
+		
+		System.out.println("------------------------");
+		System.out.println("a: " + a.getRowDimension() + "x" + a.getColumnDimension());
+		
 		return 0;
 	}
 

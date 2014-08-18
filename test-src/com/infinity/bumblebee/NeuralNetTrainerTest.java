@@ -65,7 +65,7 @@ public class NeuralNetTrainerTest {
 		thetas.add(theta1);
 		thetas.add(theta2);
 		
-		NeuralNetTrainer cut = new NeuralNetTrainer(thetas, 400, 25, 10);
+		NeuralNetTrainer cut = new NeuralNetTrainer(thetas);
 		double cost = cut.calculateCost(X, y);
 		
 		assertThat(cost, is(equalTo(0.287629)));

@@ -2,12 +2,14 @@ package com.infinity.bumblebee;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import org.apache.commons.math3.linear.RealMatrix;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.infinity.bumblebee.util.BumbleMatrixUtils;
 import com.infinity.bumblebee.util.DataReader;
 
 public class SigmoidFunctionTest {
@@ -23,7 +25,7 @@ public class SigmoidFunctionTest {
 	public void ensureCalculation() {
 		DataReader reader = new DataReader();
 		RealMatrix theta1 = reader.getMatrixFromFile("./test-data/Theta1.csv");
-		RealMatrix X = reader.getMatrixFromFile("./test-data/X.csv");
+		RealMatrix X = new BumbleMatrixUtils().onesColumnAdded(reader.getMatrixFromFile("./test-data/X.csv"));
 		
 		RealMatrix answer = cut.calculate(X.multiply(theta1.transpose()));
 		
