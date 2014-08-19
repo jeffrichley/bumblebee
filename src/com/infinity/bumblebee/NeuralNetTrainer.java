@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.math3.analysis.function.Log;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
@@ -88,44 +89,71 @@ public class NeuralNetTrainer {
 		
 		int m = X.getRowDimension();
 		
-		System.out.println("X: " + X.getRowDimension() + "x" + X.getColumnDimension());
-		BumbleMatrixUtils bumbleMatrixUtils = new BumbleMatrixUtils();
+		BumbleMatrixUtils bmu = new BumbleMatrixUtils();
 		
-		RealMatrix a = bumbleMatrixUtils.onesColumnAdded(X);
+		RealMatrix a = bmu.onesColumnAdded(X);
 		
 		Iterator<RealMatrix> iter = thetas.iterator();
 		while (iter.hasNext()) {
-			System.out.println("------------------------");
 			RealMatrix theta = iter.next();
-			
-			System.out.println("a: " + a.getRowDimension() + "x" + a.getColumnDimension());
-			System.out.println("Theta: " + theta.getRowDimension() + "x" + theta.getColumnDimension());
 			
 			a = function.calculate(theta.multiply(a.transpose()));
 			
 			if (iter.hasNext()) {
-				a = bumbleMatrixUtils.onesColumnAdded(a.transpose());
+				a = bmu.onesColumnAdded(a.transpose());
 			}
 		}
 		
-		final RealMatrix hTheta = a; // hTheta is the last z in the calculations
+		a = a.transpose();
 		
-		System.out.println("------------------------");
-		System.out.println("hTheta: " + hTheta.getRowDimension() + "x" + hTheta.getColumnDimension());
+		bmu.printMatrixDetails("a", a);
 		
-		double[][] ykData = new double[m][numLabels];
+		double[][] yVecData = new double[m][numLabels];
 		// fill it with 0's
-		for (double[] ds : ykData) {
+		for (double[] ds : yVecData) {
 			Arrays.fill(ds, 0);
 		}
 		// set the value from the original y into the yk's indexed element
 		for (int i = 0; i < y.getRowDimension(); i++) {
 			int val = (int) y.getRow(i)[0];
-			ykData[val][0] = 1.0; 
+			yVecData[i][val] = 1.0;
 		}
-//		RealMatrix yk = MatrixUtils.createRealMatrix(m, numLabels);
+		RealMatrix yMatrix = MatrixUtils.createRealMatrix(yVecData);
+		bmu.printMatrixDetails("yMatrix", yMatrix);
 		
-		return 0;
+		RealMatrix myOnes = MatrixUtils.createRealMatrix(a.getRowDimension(), a.getColumnDimension());
+		bmu.printMatrixDetails("myOnes", myOnes);
+		for (int i = 0; i < myOnes.getRowDimension(); i++) {
+			double[] row = myOnes.getRow(i);
+			Arrays.fill(row, 1);
+		}
+		
+		double sumForM = 0;
+		for (int i = 0; i < m; i++) {
+			double[] yRowValue = yMatrix.getRow(i);
+			RealMatrix yVec = MatrixUtils.createRealMatrix(new double[][]{yRowValue});
+			bmu.printMatrixDetails("yVec", yVec);
+			
+			double[] a3RowValue = a.getRow(i);
+			RealMatrix a3 = MatrixUtils.createRealMatrix(new double[][]{a3RowValue});
+			
+			double[] onesValue = myOnes.getRow(i);
+			RealMatrix ones = MatrixUtils.createRealMatrix(new double[][]{onesValue});
+			
+//			myone = (-yVec(i,:) .* log(A3(i,:)));   	% spot on values
+			RealMatrix myOne = bmu.elementWiseMutilply(yVec.scalarMultiply(-1), bmu.log(a3));
+			
+//			mytwo = myOnes(i,:) .- yVec(i,:);       	% spot on values
+			RealMatrix myTwo = bmu.elementWiseSubstract(ones, yVec);
+			
+//			mythree = log(myOnes(i,:) .- A3(i,:));    % spot on values
+			RealMatrix myThree = bmu.log(bmu.elementWiseSubstract(myOne, a3));
+
+//			sumForM = sumForM + sum(myone - mytwo .* mythree);
+			sumForM += bmu.sum(bmu.elementWiseSubstract(myOne, bmu.elementWiseMutilply(myTwo, myThree)));
+		}
+		
+		return sumForM;
 	}
 
 }
