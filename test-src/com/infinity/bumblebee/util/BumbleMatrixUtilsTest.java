@@ -2,7 +2,7 @@ package com.infinity.bumblebee.util;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,5 +35,24 @@ public class BumbleMatrixUtilsTest {
 		assertThat(withOnes.getColumn(1)[0], is(equalTo(2d)));
 		assertThat(withOnes.getColumn(1)[1], is(equalTo(3d)));
 	}
+	
+	@Test
+	public void ensureLog() {
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(new double[][]{{.1, .5, .9}});
+		BumbleMatrix log = cut.log(matrix);
+		
+		assertEquals(log.getEntry(0, 0), -2.3025850929940455, 0.0000001);
+		assertEquals(log.getEntry(0, 1), -0.6931471805599453, 0.0000001);
+		assertEquals(log.getEntry(0, 2), -0.10536051565782628, 0.0000001);
+	}
 
+	@Test
+	public void ensureElementwiseSubtract() {
+		BumbleMatrix one = new BumbleMatrixFactory().createMatrix(new double[][]{{2, 4}});
+		BumbleMatrix two = new BumbleMatrixFactory().createMatrix(new double[][]{{1, 2}});
+		BumbleMatrix subtract = cut.elementWiseSubstract(one, two);
+		
+		assertThat(subtract.getEntry(0, 0), is(equalTo(1d)));
+		assertThat(subtract.getEntry(0, 1), is(equalTo(2d)));
+	}
 }

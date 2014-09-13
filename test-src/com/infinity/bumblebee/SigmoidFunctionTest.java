@@ -29,9 +29,6 @@ public class SigmoidFunctionTest {
 		
 		BumbleMatrix answer = cut.calculate(X.multiply(theta1.transpose()));
 		
-//		System.out.println(answer.getEntry(1, 0));
-//		System.out.println(0.008057821627182112);
-		
 		assertThat(answer.getRowDimension(), is(equalTo(5000)));
 		assertThat(answer.getColumnDimension(), is(equalTo(25)));
 		

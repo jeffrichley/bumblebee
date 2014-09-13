@@ -54,6 +54,12 @@ public interface BumbleMatrix {
 	 * @param value The double value to set at the given row and column
 	 */
 	void setEntry(int row, int column, double value);
+	
+	/**
+	 * Fills the <code>BumbleMatrix</code> with the given value
+	 * @param value The value to fill the matrix with
+	 */
+	void fill(double value);
 
 	/**
 	 * Get a column from the <code>BumbleMatrix</code> 

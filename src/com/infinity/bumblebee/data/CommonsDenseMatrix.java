@@ -55,18 +55,27 @@ public class CommonsDenseMatrix implements BumbleMatrix {
 	}
 
 	@Override
-	public double[] getColumn(int columnNumber) {
+	public double[] getColumn(final int columnNumber) {
 		return matrix.getColumn(columnNumber);
 	}
 
 	@Override
-	public double[] getRow(int rowNumber) {
+	public double[] getRow(final int rowNumber) {
 		return matrix.getRow(rowNumber);
 	}
 
 	@Override
 	public double[][] getData() {
 		return matrix.getData();
+	}
+
+	@Override
+	public void fill(final double value) {
+		for (int row = 0; row < matrix.getRowDimension(); row++) {
+			for (int column = 0; column < matrix.getColumnDimension(); column++) {
+				matrix.setEntry(row, column, value);
+			}
+		}
 	}
 
 }

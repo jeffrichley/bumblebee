@@ -2,6 +2,7 @@ package com.infinity.bumblebee;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class NeuralNetTrainerTest {
 		NeuralNetTrainer cut = new NeuralNetTrainer(thetas);
 		double cost = cut.calculateCost(X, y, 10);
 		
-		assertThat(cost, is(equalTo(0.287629)));
+		assertEquals(cost, 0.287629, 0.000001);
 	}
 
 }

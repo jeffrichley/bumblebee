@@ -113,5 +113,16 @@ public class MTJMatrixTest {
 		assertThat(data[1][1], is(equalTo(5d)));
 		assertThat(data[1][2], is(equalTo(6d)));
 	}
+	
+	@Test
+	public void ensureFill() {
+		cut.fill(9);
+		
+		for (int row = 0; row < cut.getRowDimension(); row++) {
+			for (int column = 0; column < cut.getColumnDimension(); column++) {
+				assertThat(cut.getEntry(row, column), is(equalTo(9d)));
+			}
+		}
+	}
 
 }

@@ -1,7 +1,6 @@
 package com.infinity.bumblebee.data;
 
 import no.uib.cipr.matrix.DenseMatrix;
-import no.uib.cipr.matrix.Matrix;
 import no.uib.cipr.matrix.MatrixEntry;
 
 public class MTJMatrix implements BumbleMatrix {
@@ -90,6 +89,15 @@ public class MTJMatrix implements BumbleMatrix {
 			}
 		}
 		return data;
+	}
+
+	@Override
+	public void fill(double value) {
+		for (int row = 0; row < matrix.numRows(); row++) {
+			for (int column = 0; column < matrix.numColumns(); column++) {
+				matrix.set(row, column, value);
+			}
+		}
 	}
 
 }

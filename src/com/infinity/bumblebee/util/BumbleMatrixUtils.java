@@ -1,7 +1,5 @@
 package com.infinity.bumblebee.util;
 
-import org.apache.commons.math3.analysis.function.Log;
-
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
 
@@ -28,12 +26,11 @@ public class BumbleMatrixUtils {
 	}
 
 	public BumbleMatrix log(BumbleMatrix original) {
-		Log log = new Log();
 		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(original.getRowDimension(), original.getColumnDimension());
 		
 		for (int i = 0; i < original.getRowDimension(); i++) {
 			for (int j = 0; j < original.getColumnDimension(); j++) {
-				matrix.setEntry(i, j, log.value(original.getEntry(i, j)));
+				matrix.setEntry(i, j, Math.log(original.getEntry(i, j)));
 			}
 		}
 		

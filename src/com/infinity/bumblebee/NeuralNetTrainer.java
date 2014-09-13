@@ -86,11 +86,14 @@ public class NeuralNetTrainer {
 	protected double calculateCost(BumbleMatrix X, BumbleMatrix y, int numLabels) {
 		// nnCostFunction.m from mlclass-ex4-005
 		
+		// set up helpful variables
+		// m = size(X, 1);
 		int m = X.getRowDimension();
 		
 		BumbleMatrixUtils bmu = new BumbleMatrixUtils();
 		
 		BumbleMatrix a = bmu.onesColumnAdded(X);
+		bmu.printMatrixDetails("a", a);
 		
 		Iterator<BumbleMatrix> iter = thetas.iterator();
 		while (iter.hasNext()) {
@@ -105,7 +108,9 @@ public class NeuralNetTrainer {
 		
 		a = a.transpose();
 		
-//		bmu.printMatrixDetails("a", a);
+		bmu.printMatrixDetails("a", a);
+		
+		// Code Marker #1
 		
 		double[][] yVecData = new double[m][numLabels];
 		// fill it with 0's
@@ -118,41 +123,50 @@ public class NeuralNetTrainer {
 			yVecData[i][val] = 1.0;
 		}
 		BumbleMatrix yMatrix = factory.createMatrix(yVecData);
+		
 //		bmu.printMatrixDetails("yMatrix", yMatrix);
 		
 		BumbleMatrix myOnes = factory.createMatrix(a.getRowDimension(), a.getColumnDimension());
 //		bmu.printMatrixDetails("myOnes", myOnes);
-		for (int i = 0; i < myOnes.getRowDimension(); i++) {
-			double[] row = myOnes.getRow(i);
-			Arrays.fill(row, 1);
-		}
+//		for (int i = 0; i < myOnes.getRowDimension(); i++) {
+//			double[] row = myOnes.getRow(i);
+//			Arrays.fill(row, 1);
+//		}
+		myOnes.fill(1d);
 		
 		double sumForM = 0;
 		for (int i = 0; i < m; i++) {
 			double[] yRowValue = yMatrix.getRow(i);
+			// check: yVec is good
 			BumbleMatrix yVec = factory.createMatrix(new double[][]{yRowValue});
 //			bmu.printMatrixDetails("yVec", yVec);
 			
 			double[] a3RowValue = a.getRow(i);
+			// check: a3 is good
 			BumbleMatrix a3 = factory.createMatrix(new double[][]{a3RowValue});
 			
 			double[] onesValue = myOnes.getRow(i);
 			BumbleMatrix ones = factory.createMatrix(new double[][]{onesValue});
 			
 //			myone = (-yVec(i,:) .* log(A3(i,:)));   	% spot on values
+			
+			// a3, log(a3), -yVec is fine
+			// myOne looks good - i hope
 			BumbleMatrix myOne = bmu.elementWiseMutilply(yVec.scalarMultiply(-1), bmu.log(a3));
 			
 //			mytwo = myOnes(i,:) .- yVec(i,:);       	% spot on values
+			// myTwo looks good
 			BumbleMatrix myTwo = bmu.elementWiseSubstract(ones, yVec);
 			
 //			mythree = log(myOnes(i,:) .- A3(i,:));    % spot on values
-			BumbleMatrix myThree = bmu.log(bmu.elementWiseSubstract(myOne, a3));
+			
+			BumbleMatrix myThree = bmu.log(bmu.elementWiseSubstract(ones, a3));
 
 //			sumForM = sumForM + sum(myone - mytwo .* mythree);
 			sumForM += bmu.sum(bmu.elementWiseSubstract(myOne, bmu.elementWiseMutilply(myTwo, myThree)));
 		}
 		
-		return sumForM;
+		return sumForM / m;
 	}
 
 }
