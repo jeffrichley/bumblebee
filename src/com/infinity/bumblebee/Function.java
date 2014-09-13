@@ -1,6 +1,6 @@
 package com.infinity.bumblebee;
 
-import org.apache.commons.math3.linear.RealMatrix;
+import com.infinity.bumblebee.data.BumbleMatrix;
 
 /**
  * Performs calculations during training and predictions
@@ -13,6 +13,6 @@ public interface Function {
 	 * @param z The z value of the function
 	 * @return The overall value
 	 */
-	public RealMatrix calculate(RealMatrix z);
+	public BumbleMatrix calculate(BumbleMatrix z);
 	
 }

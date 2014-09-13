@@ -5,10 +5,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import org.apache.commons.math3.linear.RealMatrix;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 import com.infinity.bumblebee.util.DataReader;
 
@@ -24,13 +24,13 @@ public class SigmoidFunctionTest {
 	@Test
 	public void ensureCalculation() {
 		DataReader reader = new DataReader();
-		RealMatrix theta1 = reader.getMatrixFromFile("./test-data/Theta1.csv");
-		RealMatrix X = new BumbleMatrixUtils().onesColumnAdded(reader.getMatrixFromFile("./test-data/X.csv"));
+		BumbleMatrix theta1 = reader.getMatrixFromFile("./test-data/Theta1.csv");
+		BumbleMatrix X = new BumbleMatrixUtils().onesColumnAdded(reader.getMatrixFromFile("./test-data/X.csv"));
 		
-		RealMatrix answer = cut.calculate(X.multiply(theta1.transpose()));
+		BumbleMatrix answer = cut.calculate(X.multiply(theta1.transpose()));
 		
-		System.out.println(answer.getEntry(1, 0));
-		System.out.println(0.008057821627182112);
+//		System.out.println(answer.getEntry(1, 0));
+//		System.out.println(0.008057821627182112);
 		
 		assertThat(answer.getRowDimension(), is(equalTo(5000)));
 		assertThat(answer.getColumnDimension(), is(equalTo(25)));

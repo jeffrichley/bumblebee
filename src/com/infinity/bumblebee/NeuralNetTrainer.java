@@ -5,10 +5,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.math3.analysis.function.Log;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-
+import com.infinity.bumblebee.data.BumbleMatrix;
+import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 
 /**
@@ -20,24 +18,25 @@ import com.infinity.bumblebee.util.BumbleMatrixUtils;
  */
 public class NeuralNetTrainer {
 
-	private final List<RealMatrix> thetas;
+	private final List<BumbleMatrix> thetas;
 	private double lambda = 0;
 	private final Function function = new SigmoidFunction();
+	private final BumbleMatrixFactory factory = new BumbleMatrixFactory();
 	
 	public NeuralNetTrainer(int... layers) {
-		this.thetas = new ArrayList<RealMatrix>();
+		this.thetas = new ArrayList<BumbleMatrix>();
 		
 		// we need to make a Theta parameter between each layer
 		// which comes up to one less that the number of layers
 		for (int i = 0; i < layers.length - 1; i++) {
 			// make sure that there is one more column that the 
 			// specified layer due to the 1's bias
-			RealMatrix theta = MatrixUtils.createRealMatrix(layers[i+1], layers[i] + 1);
+			BumbleMatrix theta = factory.createMatrix(layers[i+1], layers[i] + 1);
 			thetas.add(theta);
 		}
 	}
 	
-	public NeuralNetTrainer(List<RealMatrix> thetas) {
+	public NeuralNetTrainer(List<BumbleMatrix> thetas) {
 		this.thetas = thetas;
 
 	}
@@ -56,7 +55,7 @@ public class NeuralNetTrainer {
 	 * @return The row and column size of the Theta matrix
 	 */
 	public IntegerTuple getSizeOfTheta(int index) {
-		RealMatrix theta = thetas.get(index);
+		BumbleMatrix theta = thetas.get(index);
 		IntegerTuple size = new IntegerTuple(theta.getRowDimension(), theta.getColumnDimension());
 		return size ;
 	}
@@ -84,18 +83,18 @@ public class NeuralNetTrainer {
 	 * @param numLabels The number of distinct labels for the training data
 	 * @return The cost of the network for the given training and label data
 	 */
-	protected double calculateCost(RealMatrix X, RealMatrix y, int numLabels) {
+	protected double calculateCost(BumbleMatrix X, BumbleMatrix y, int numLabels) {
 		// nnCostFunction.m from mlclass-ex4-005
 		
 		int m = X.getRowDimension();
 		
 		BumbleMatrixUtils bmu = new BumbleMatrixUtils();
 		
-		RealMatrix a = bmu.onesColumnAdded(X);
+		BumbleMatrix a = bmu.onesColumnAdded(X);
 		
-		Iterator<RealMatrix> iter = thetas.iterator();
+		Iterator<BumbleMatrix> iter = thetas.iterator();
 		while (iter.hasNext()) {
-			RealMatrix theta = iter.next();
+			BumbleMatrix theta = iter.next();
 			
 			a = function.calculate(theta.multiply(a.transpose()));
 			
@@ -106,7 +105,7 @@ public class NeuralNetTrainer {
 		
 		a = a.transpose();
 		
-		bmu.printMatrixDetails("a", a);
+//		bmu.printMatrixDetails("a", a);
 		
 		double[][] yVecData = new double[m][numLabels];
 		// fill it with 0's
@@ -118,11 +117,11 @@ public class NeuralNetTrainer {
 			int val = (int) y.getRow(i)[0];
 			yVecData[i][val] = 1.0;
 		}
-		RealMatrix yMatrix = MatrixUtils.createRealMatrix(yVecData);
-		bmu.printMatrixDetails("yMatrix", yMatrix);
+		BumbleMatrix yMatrix = factory.createMatrix(yVecData);
+//		bmu.printMatrixDetails("yMatrix", yMatrix);
 		
-		RealMatrix myOnes = MatrixUtils.createRealMatrix(a.getRowDimension(), a.getColumnDimension());
-		bmu.printMatrixDetails("myOnes", myOnes);
+		BumbleMatrix myOnes = factory.createMatrix(a.getRowDimension(), a.getColumnDimension());
+//		bmu.printMatrixDetails("myOnes", myOnes);
 		for (int i = 0; i < myOnes.getRowDimension(); i++) {
 			double[] row = myOnes.getRow(i);
 			Arrays.fill(row, 1);
@@ -131,23 +130,23 @@ public class NeuralNetTrainer {
 		double sumForM = 0;
 		for (int i = 0; i < m; i++) {
 			double[] yRowValue = yMatrix.getRow(i);
-			RealMatrix yVec = MatrixUtils.createRealMatrix(new double[][]{yRowValue});
-			bmu.printMatrixDetails("yVec", yVec);
+			BumbleMatrix yVec = factory.createMatrix(new double[][]{yRowValue});
+//			bmu.printMatrixDetails("yVec", yVec);
 			
 			double[] a3RowValue = a.getRow(i);
-			RealMatrix a3 = MatrixUtils.createRealMatrix(new double[][]{a3RowValue});
+			BumbleMatrix a3 = factory.createMatrix(new double[][]{a3RowValue});
 			
 			double[] onesValue = myOnes.getRow(i);
-			RealMatrix ones = MatrixUtils.createRealMatrix(new double[][]{onesValue});
+			BumbleMatrix ones = factory.createMatrix(new double[][]{onesValue});
 			
 //			myone = (-yVec(i,:) .* log(A3(i,:)));   	% spot on values
-			RealMatrix myOne = bmu.elementWiseMutilply(yVec.scalarMultiply(-1), bmu.log(a3));
+			BumbleMatrix myOne = bmu.elementWiseMutilply(yVec.scalarMultiply(-1), bmu.log(a3));
 			
 //			mytwo = myOnes(i,:) .- yVec(i,:);       	% spot on values
-			RealMatrix myTwo = bmu.elementWiseSubstract(ones, yVec);
+			BumbleMatrix myTwo = bmu.elementWiseSubstract(ones, yVec);
 			
 //			mythree = log(myOnes(i,:) .- A3(i,:));    % spot on values
-			RealMatrix myThree = bmu.log(bmu.elementWiseSubstract(myOne, a3));
+			BumbleMatrix myThree = bmu.log(bmu.elementWiseSubstract(myOne, a3));
 
 //			sumForM = sumForM + sum(myone - mytwo .* mythree);
 			sumForM += bmu.sum(bmu.elementWiseSubstract(myOne, bmu.elementWiseMutilply(myTwo, myThree)));

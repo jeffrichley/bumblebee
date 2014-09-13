@@ -1,13 +1,16 @@
 package com.infinity.bumblebee;
 
 import org.apache.commons.math3.analysis.function.Exp;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
+
+import com.infinity.bumblebee.data.BumbleMatrix;
+import com.infinity.bumblebee.data.BumbleMatrixFactory;
 
 public class SigmoidFunction implements Function {
+	
+	private final BumbleMatrixFactory factory = new BumbleMatrixFactory();
 
 	@Override
-	public RealMatrix calculate(RealMatrix z) {
+	public BumbleMatrix calculate(BumbleMatrix z) {
 		Exp e = new Exp();
 		z = z.scalarMultiply(-1);
 		
@@ -21,7 +24,7 @@ public class SigmoidFunction implements Function {
 			}
 		}
 		
-		return MatrixUtils.createRealMatrix(data);
+		return factory.createMatrix(data);
 	}
 
 }

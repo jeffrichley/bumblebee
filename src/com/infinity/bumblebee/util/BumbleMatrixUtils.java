@@ -1,12 +1,13 @@
 package com.infinity.bumblebee.util;
 
 import org.apache.commons.math3.analysis.function.Log;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
+
+import com.infinity.bumblebee.data.BumbleMatrix;
+import com.infinity.bumblebee.data.BumbleMatrixFactory;
 
 public class BumbleMatrixUtils {
 
-	public RealMatrix onesColumnAdded(RealMatrix matrix) {
+	public BumbleMatrix onesColumnAdded(BumbleMatrix matrix) {
 		double[][] data = new double[matrix.getRowDimension()][matrix.getColumnDimension()+1];
 		
 		for (int i = 0; i < data.length; i++) {
@@ -18,17 +19,17 @@ public class BumbleMatrixUtils {
 			}
 		}
 		
-		return MatrixUtils.createRealMatrix(data);
+		return new BumbleMatrixFactory().createMatrix(data);
 	}
 
-	public void printMatrixDetails(String name, RealMatrix matrix) {
+	public void printMatrixDetails(String name, BumbleMatrix matrix) {
 		System.out.println("------------------------");
 		System.out.println(name + ": " + matrix.getRowDimension() + "x" + matrix.getColumnDimension());
 	}
 
-	public RealMatrix log(RealMatrix original) {
+	public BumbleMatrix log(BumbleMatrix original) {
 		Log log = new Log();
-		RealMatrix matrix = MatrixUtils.createRealMatrix(original.getRowDimension(), original.getColumnDimension());
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(original.getRowDimension(), original.getColumnDimension());
 		
 		for (int i = 0; i < original.getRowDimension(); i++) {
 			for (int j = 0; j < original.getColumnDimension(); j++) {
@@ -39,8 +40,8 @@ public class BumbleMatrixUtils {
 		return matrix;
 	}
 	
-	public RealMatrix elementWiseMutilply(RealMatrix one, RealMatrix two) {
-		RealMatrix matrix = MatrixUtils.createRealMatrix(one.getRowDimension(), one.getColumnDimension());
+	public BumbleMatrix elementWiseMutilply(BumbleMatrix one, BumbleMatrix two) {
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(one.getRowDimension(), one.getColumnDimension());
 		
 		for (int i = 0; i < one.getRowDimension(); i++) {
 			for (int j = 0; j < one.getColumnDimension(); j++) {
@@ -53,11 +54,11 @@ public class BumbleMatrixUtils {
 		return matrix;
 	}
 	
-	public RealMatrix elementWiseSubstract(RealMatrix one, RealMatrix two) {
-		printMatrixDetails("one", one);
-		printMatrixDetails("two", two);
+	public BumbleMatrix elementWiseSubstract(BumbleMatrix one, BumbleMatrix two) {
+//		printMatrixDetails("one", one);
+//		printMatrixDetails("two", two);
 		
-		RealMatrix matrix = MatrixUtils.createRealMatrix(one.getRowDimension(), one.getColumnDimension());
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(one.getRowDimension(), one.getColumnDimension());
 		
 		for (int i = 0; i < one.getRowDimension(); i++) {
 			for (int j = 0; j < one.getColumnDimension(); j++) {
@@ -70,8 +71,8 @@ public class BumbleMatrixUtils {
 		return matrix;
 	}
 	
-	public RealMatrix elementWiseAddition(RealMatrix one, RealMatrix two) {
-		RealMatrix matrix = MatrixUtils.createRealMatrix(one.getRowDimension(), one.getColumnDimension());
+	public BumbleMatrix elementWiseAddition(BumbleMatrix one, BumbleMatrix two) {
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(one.getRowDimension(), one.getColumnDimension());
 		
 		for (int i = 0; i < one.getRowDimension(); i++) {
 			for (int j = 0; j < one.getColumnDimension(); j++) {
@@ -84,7 +85,7 @@ public class BumbleMatrixUtils {
 		return matrix;
 	}
 
-	public double sum(RealMatrix matrix) {
+	public double sum(BumbleMatrix matrix) {
 		double answer = 0;
 		for (int i = 0; i < matrix.getRowDimension(); i++) {
 			for (int j = 0; j < matrix.getColumnDimension(); j++) {
@@ -94,4 +95,5 @@ public class BumbleMatrixUtils {
 		}
 		return answer;
 	}
+
 }

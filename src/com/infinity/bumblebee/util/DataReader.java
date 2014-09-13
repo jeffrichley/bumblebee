@@ -6,21 +6,26 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
+import com.infinity.bumblebee.data.BumbleMatrix;
+import com.infinity.bumblebee.data.BumbleMatrixFactory;
 
 /**
  * Reads a csv file into a matrix
  * @author Jeffrey.Richley
  */
 public class DataReader {
+	
+	/**
+	 * The <code>BumbleMatrixFactory</code> for creating a <code>BumbleMatrix</code>
+	 */
+	private BumbleMatrixFactory factory = new BumbleMatrixFactory();
 
 	/**
 	 * Read in the given filename and convert the columns and rows into a matrix
 	 * @param fileName The name of the file to read data from
 	 * @return A <code>RealMatrix</code> created from the file contents
 	 */
-	public RealMatrix getMatrixFromFile(String fileName) {
+	public BumbleMatrix getMatrixFromFile(String fileName) {
 		List<double[]> rows = new ArrayList<double[]>();
 		
 		LineNumberReader in = null;
@@ -49,8 +54,7 @@ public class DataReader {
 			}
 		}
 		
-		RealMatrix matrix = MatrixUtils.createRealMatrix(rows.toArray(new double[rows.size()][]));
-		return matrix;
+		return factory.createMatrix(rows.toArray(new double[rows.size()][]));
 	}
 	
 }

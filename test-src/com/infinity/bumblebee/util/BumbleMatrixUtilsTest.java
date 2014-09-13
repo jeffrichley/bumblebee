@@ -4,10 +4,11 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.infinity.bumblebee.data.BumbleMatrix;
+import com.infinity.bumblebee.data.BumbleMatrixFactory;
 
 public class BumbleMatrixUtilsTest {
 	
@@ -21,8 +22,8 @@ public class BumbleMatrixUtilsTest {
 	@Test
 	public void ensureOnesColumnAdded() {
 		// original is a 2x3
-		RealMatrix matrix = MatrixUtils.createRealMatrix(new double[][]{{2,2,2}, {3,3,3}});
-		RealMatrix withOnes = cut.onesColumnAdded(matrix);
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(new double[][]{{2,2,2}, {3,3,3}});
+		BumbleMatrix withOnes = cut.onesColumnAdded(matrix);
 		
 		// resulting matrix should now be 2x4 with ones in the first column
 		assertThat(withOnes.getRowDimension(), is(equalTo(2)));

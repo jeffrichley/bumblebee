@@ -6,9 +6,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.commons.math3.linear.RealMatrix;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.infinity.bumblebee.data.BumbleMatrix;
 
 public class DataReaderTest {
 
@@ -21,7 +22,7 @@ public class DataReaderTest {
 	
 	@Test
 	public void ensureCanReadCsv() {
-		RealMatrix matrix = cut.getMatrixFromFile("./test-data/X.csv");
+		BumbleMatrix matrix = cut.getMatrixFromFile("./test-data/X.csv");
 		
 		assertThat(matrix, is(not(nullValue())));
 		assertThat(matrix.getRowDimension(), is(equalTo(5000)));

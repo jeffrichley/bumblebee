@@ -7,10 +7,10 @@ import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.math3.linear.RealMatrix;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.util.DataReader;
 
 public class NeuralNetTrainerTest {
@@ -56,10 +56,10 @@ public class NeuralNetTrainerTest {
 	@Test
 	public void ensureCostCalculation() {
 		DataReader reader = new DataReader();
-		RealMatrix theta1 = reader.getMatrixFromFile("./test-data/Theta1.csv");
-		RealMatrix theta2 = reader.getMatrixFromFile("./test-data/Theta2.csv");
-		RealMatrix X = reader.getMatrixFromFile("./test-data/X.csv");
-		RealMatrix y = reader.getMatrixFromFile("./test-data/y.csv");
+		BumbleMatrix theta1 = reader.getMatrixFromFile("./test-data/Theta1.csv");
+		BumbleMatrix theta2 = reader.getMatrixFromFile("./test-data/Theta2.csv");
+		BumbleMatrix X = reader.getMatrixFromFile("./test-data/X.csv");
+		BumbleMatrix y = reader.getMatrixFromFile("./test-data/y.csv");
 		
 		// original y was coded from 1-10 and we need to make it 0-9
 		for (int i = 0; i < y.getRowDimension(); i++) {
@@ -67,7 +67,7 @@ public class NeuralNetTrainerTest {
 			y.setEntry(i, 0, val);
 		}
 
-		List<RealMatrix> thetas = new ArrayList<RealMatrix>();
+		List<BumbleMatrix> thetas = new ArrayList<BumbleMatrix>();
 		thetas.add(theta1);
 		thetas.add(theta2);
 		
