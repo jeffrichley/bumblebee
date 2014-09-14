@@ -1,4 +1,4 @@
-package com.infinity.bumblebee;
+package com.infinity.bumblebee.functions;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
 
@@ -13,6 +13,6 @@ public interface Function {
 	 * @param z The z value of the function
 	 * @return The overall value
 	 */
-	public BumbleMatrix calculate(BumbleMatrix z);
+	BumbleMatrix calculate(BumbleMatrix z);
 	
 }

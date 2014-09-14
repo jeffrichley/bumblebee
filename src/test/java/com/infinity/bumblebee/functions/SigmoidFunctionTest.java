@@ -1,4 +1,4 @@
-package com.infinity.bumblebee;
+package com.infinity.bumblebee.functions;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
+import com.infinity.bumblebee.functions.SigmoidFunction;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 import com.infinity.bumblebee.util.DataReader;
 

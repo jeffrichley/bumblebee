@@ -1,4 +1,5 @@
-package com.infinity.bumblebee;
+package com.infinity.bumblebee.data;
+
 
 /**
  * An <code>Integer</code> version of a <code>Tuple</code>

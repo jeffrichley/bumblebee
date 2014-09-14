@@ -47,10 +47,12 @@ public class DataReader {
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to read " + fileName, e);
 		} finally {
-			try {
-				in.close();
-			} catch (IOException e) {
-				throw new RuntimeException("Unable to close " + fileName, e);
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					throw new RuntimeException("Unable to close " + fileName, e);
+				}
 			}
 		}
 		

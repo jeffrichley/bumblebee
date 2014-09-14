@@ -55,7 +55,18 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
-	public void ensureCostCalculation() {
+	public void ensureCostCalculationWithZeroLambda() {
+		double cost = process(0);
+		assertEquals(cost, 0.287629, 0.000001);
+	}
+	
+	@Test
+	public void ensureCostCalculationWithOneLambda() {
+		double cost = process(1);
+		assertEquals(cost, 0.383770, 0.001);
+	}
+
+	private double process(double lambda) {
 		DataReader reader = new DataReader();
 		BumbleMatrix theta1 = reader.getMatrixFromFile("./test-data/Theta1.csv");
 		BumbleMatrix theta2 = reader.getMatrixFromFile("./test-data/Theta2.csv");
@@ -73,9 +84,7 @@ public class NeuralNetTrainerTest {
 		thetas.add(theta2);
 		
 		NeuralNetTrainer cut = new NeuralNetTrainer(thetas);
-		double cost = cut.calculateCost(X, y, 10);
-		
-		assertEquals(cost, 0.287629, 0.000001);
+		return cut.calculateCost(X, y, 10, lambda);
 	}
 
 }

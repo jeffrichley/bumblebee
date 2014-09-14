@@ -1,4 +1,4 @@
-package com.infinity.bumblebee;
+package com.infinity.bumblebee.data;
 
 
 /**

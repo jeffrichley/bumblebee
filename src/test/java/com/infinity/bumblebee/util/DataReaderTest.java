@@ -28,4 +28,9 @@ public class DataReaderTest {
 		assertThat(matrix.getRowDimension(), is(equalTo(5000)));
 		assertThat(matrix.getColumnDimension(), is(equalTo(400)));
 	}
+	
+	@Test(expected=RuntimeException.class)
+	public void ensureIOExceptionNotFoundFile(){
+		cut.getMatrixFromFile("some-non-existent-file.csv");
+	}
 }

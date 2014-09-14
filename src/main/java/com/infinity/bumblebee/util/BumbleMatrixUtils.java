@@ -93,4 +93,15 @@ public class BumbleMatrixUtils {
 		return answer;
 	}
 
+	public BumbleMatrix elementWiseSquare(BumbleMatrix theta) {
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(theta.getRowDimension(), theta.getColumnDimension());
+		for (int row = 0; row < theta.getRowDimension(); row++) {
+			for (int column = 0; column < theta.getColumnDimension(); column++) {
+				double val = theta.getEntry(row, column);
+				matrix.setEntry(row, column, val * val);
+			}
+		}
+		return matrix;
+	}
+
 }

@@ -7,6 +7,9 @@ import java.util.List;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
+import com.infinity.bumblebee.data.IntegerTuple;
+import com.infinity.bumblebee.functions.Function;
+import com.infinity.bumblebee.functions.SigmoidFunction;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 
 /**
@@ -38,7 +41,6 @@ public class NeuralNetTrainer {
 	
 	public NeuralNetTrainer(List<BumbleMatrix> thetas) {
 		this.thetas = thetas;
-
 	}
 
 	/**
@@ -81,9 +83,10 @@ public class NeuralNetTrainer {
 	 * @param X The training data
 	 * @param y The desired labels for the training data
 	 * @param numLabels The number of distinct labels for the training data
+	 * @param lambda The regularization parameter.  A reasponable default would be 0.
 	 * @return The cost of the network for the given training and label data
 	 */
-	protected double calculateCost(BumbleMatrix X, BumbleMatrix y, int numLabels) {
+	protected double calculateCost(BumbleMatrix X, BumbleMatrix y, int numLabels, double lambda) {
 		// nnCostFunction.m from mlclass-ex4-005
 		
 		// set up helpful variables
@@ -93,7 +96,7 @@ public class NeuralNetTrainer {
 		BumbleMatrixUtils bmu = new BumbleMatrixUtils();
 		
 		BumbleMatrix a = bmu.onesColumnAdded(X);
-		bmu.printMatrixDetails("a", a);
+//		bmu.printMatrixDetails("a", a);
 		
 		Iterator<BumbleMatrix> iter = thetas.iterator();
 		while (iter.hasNext()) {
@@ -108,7 +111,7 @@ public class NeuralNetTrainer {
 		
 		a = a.transpose();
 		
-		bmu.printMatrixDetails("a", a);
+//		bmu.printMatrixDetails("a", a);
 		
 		// Code Marker #1
 		
@@ -166,7 +169,19 @@ public class NeuralNetTrainer {
 			sumForM += bmu.sum(bmu.elementWiseSubstract(myOne, bmu.elementWiseMutilply(myTwo, myThree)));
 		}
 		
-		return sumForM / m;
+		double cost = sumForM / m;
+		double regularization = 0;
+		double regularizatonSummations = 0;
+		if (lambda != 0) {
+			for (BumbleMatrix theta : thetas) {
+				BumbleMatrix squared = bmu.elementWiseSquare(theta);
+				regularizatonSummations += bmu.sum(squared);
+			}
+			
+			regularization = (lambda / (2 * m)) * regularizatonSummations;
+		}
+		
+		return cost + regularization;
 	}
 
 }
