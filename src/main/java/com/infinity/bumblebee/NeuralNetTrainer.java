@@ -8,7 +8,7 @@ import java.util.List;
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.data.IntegerTuple;
-import com.infinity.bumblebee.functions.Function;
+import com.infinity.bumblebee.functions.MatrixFunction;
 import com.infinity.bumblebee.functions.SigmoidFunction;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 
@@ -23,7 +23,7 @@ public class NeuralNetTrainer {
 
 	private final List<BumbleMatrix> thetas;
 	private double lambda = 0;
-	private final Function function = new SigmoidFunction();
+	private final MatrixFunction function = new SigmoidFunction();
 	private final BumbleMatrixFactory factory = new BumbleMatrixFactory();
 	
 	public NeuralNetTrainer(int... layers) {

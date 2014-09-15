@@ -5,7 +5,7 @@ import org.apache.commons.math3.analysis.function.Exp;
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
 
-public class SigmoidFunction implements Function {
+public class SigmoidFunction implements MatrixFunction {
 	
 	private final BumbleMatrixFactory factory = new BumbleMatrixFactory();
 

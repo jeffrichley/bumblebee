@@ -6,7 +6,7 @@ import com.infinity.bumblebee.data.BumbleMatrix;
  * Performs calculations during training and predictions
  * @author Jeffrey.Richley
  */
-public interface Function {
+public interface MatrixFunction {
 
 	/**
 	 * Calculate the information with the given value
