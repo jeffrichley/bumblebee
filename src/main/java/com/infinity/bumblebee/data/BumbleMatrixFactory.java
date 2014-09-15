@@ -7,7 +7,7 @@ package com.infinity.bumblebee.data;
  * @author jeffreyrichley
  */
 public class BumbleMatrixFactory {
-
+	
 	/**
 	 * Create a new <code>BumbleMatrix</code>
 	 * @param ds The data source of the matrix
@@ -27,6 +27,18 @@ public class BumbleMatrixFactory {
 	public BumbleMatrix createMatrix(int rowDimension, int columnDimension) {
 //		return new CommonsDenseMatrix(rowDimension, columnDimension);
 		return new MTJMatrix(rowDimension, columnDimension);
+	}
+
+	/**
+	 * Create a <code>BumbleMatrix</code> with the given size
+	 * @param row The number of rows for the new <code>BumbleMatrix</code> 
+	 * @param column The number of columns for the new <code>BumbleMatrix</code>
+	 * @return A <code>BumbleMatrix</code> with the given size
+	 */
+	public BumbleMatrix createOnes(int row, int column) {
+		BumbleMatrix ones = createMatrix(row, column);
+		ones.fill(1);
+		return ones;
 	}
 
 }
