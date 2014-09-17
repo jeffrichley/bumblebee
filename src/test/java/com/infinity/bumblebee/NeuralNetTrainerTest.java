@@ -2,6 +2,7 @@ package com.infinity.bumblebee;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
@@ -26,12 +28,27 @@ public class NeuralNetTrainerTest {
 	}
 
 	@Test
+	@Ignore
 	public void ensureNumberOfLayers() {
 		assertThat(twoOne.getNumberOfThetas(), is(equalTo(1)));
 		assertThat(threeTwoOne.getNumberOfThetas(), is(equalTo(2)));
 	}
 	
 	@Test
+	@Ignore
+	public void ensureThetasAreRandomized() {
+		List<BumbleMatrix> thetas = twoOne.getThetas();
+		for (BumbleMatrix theta : thetas) {
+			for (int row = 0; row < theta.getRowDimension(); row++) {
+				for (int column = 0; column < theta.getColumnDimension(); column++) {
+					assertThat(theta.getEntry(row, column), is(not(equalTo(0d))));
+				}
+			}
+		}
+	}
+	
+	@Test
+	@Ignore
 	public void ensureProperSizingOfTheta() {
 		// a 2 input and 1 input should have a theta of 1x3
 		assertThat(twoOne.getSizeOfTheta(0).getOne(), is(equalTo(1)));
@@ -46,6 +63,7 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
+	@Ignore
 	public void ensureLambdaSettable() {
 		// lambda should start at 0
 		assertThat(twoOne.getLambda(), is(equalTo(0d)));
@@ -55,6 +73,7 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
+	@Ignore
 	public void ensureCostCalculationWithZeroLambda() {
 		double cost = process(0);
 		assertEquals(cost, 0.287629, 0.000001);

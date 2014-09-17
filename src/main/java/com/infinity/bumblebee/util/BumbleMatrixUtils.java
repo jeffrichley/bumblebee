@@ -51,10 +51,7 @@ public class BumbleMatrixUtils {
 		return matrix;
 	}
 	
-	public BumbleMatrix elementWiseSubstract(BumbleMatrix one, BumbleMatrix two) {
-//		printMatrixDetails("one", one);
-//		printMatrixDetails("two", two);
-		
+	public BumbleMatrix elementWiseSubtract(BumbleMatrix one, BumbleMatrix two) {
 		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(one.getRowDimension(), one.getColumnDimension());
 		
 		for (int i = 0; i < one.getRowDimension(); i++) {
@@ -104,4 +101,14 @@ public class BumbleMatrixUtils {
 		return matrix;
 	}
 
+	public BumbleMatrix elementWiseSubtract(double[] one, double[] two) {
+		double[][] answer = new double[1][one.length];
+		
+		for (int column = 0; column < one.length; column++) {
+			double value = one[column] - two[column];
+			answer[0][column] = value;
+		}
+		
+		return new BumbleMatrixFactory().createMatrix(answer);
+	}
 }

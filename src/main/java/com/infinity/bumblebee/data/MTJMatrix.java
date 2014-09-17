@@ -1,5 +1,7 @@
 package com.infinity.bumblebee.data;
 
+import java.util.Random;
+
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.MatrixEntry;
 
@@ -95,6 +97,24 @@ public class MTJMatrix implements BumbleMatrix {
 	public void fill(double value) {
 		for (int row = 0; row < matrix.numRows(); row++) {
 			for (int column = 0; column < matrix.numColumns(); column++) {
+				matrix.set(row, column, value);
+			}
+		}
+	}
+
+	@Override
+	public void randomizeWithEpsilon() {
+		double epsilon = Math.sqrt(6) / Math.sqrt(matrix.numRows() + matrix.numColumns());
+		if (epsilon > 0.12) {
+			epsilon = 0.12;
+		}
+		Random r = new Random(System.currentTimeMillis());
+		for (int row = 0; row < matrix.numRows(); row++) {
+			for (int column = 0; column < matrix.numColumns(); column++) {
+				double value = r.nextDouble() * .12;
+				if (r.nextDouble() < 0.5) {
+					value = value * -1;
+				}
 				matrix.set(row, column, value);
 			}
 		}

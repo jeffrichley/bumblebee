@@ -50,7 +50,7 @@ public class BumbleMatrixUtilsTest {
 	public void ensureElementwiseSubtract() {
 		BumbleMatrix one = new BumbleMatrixFactory().createMatrix(new double[][]{{2, 4}});
 		BumbleMatrix two = new BumbleMatrixFactory().createMatrix(new double[][]{{1, 2}});
-		BumbleMatrix subtract = cut.elementWiseSubstract(one, two);
+		BumbleMatrix subtract = cut.elementWiseSubtract(one, two);
 		
 		assertThat(subtract.getEntry(0, 0), is(equalTo(1d)));
 		assertThat(subtract.getEntry(0, 1), is(equalTo(2d)));
@@ -77,4 +77,17 @@ public class BumbleMatrixUtilsTest {
 		assertThat(square.getEntry(1, 1), is(equalTo(16d)));
 	}
 	
+	@Test
+	public void ensureElementWiseSubtractArrays() {
+		double[] one = new double[]{1,2};
+		double[] two = new double[]{1,1};
+		
+		BumbleMatrix answer = cut.elementWiseSubtract(one, two);
+		
+		assertThat(answer.getRowDimension(), is(equalTo(1)));
+		assertThat(answer.getColumnDimension(), is(equalTo(2)));
+		
+		assertThat(answer.getEntry(0, 0), is(equalTo(0d)));
+		assertThat(answer.getEntry(0, 1), is(equalTo(1d)));
+	}
 }

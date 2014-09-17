@@ -81,4 +81,9 @@ public interface BumbleMatrix {
 	 */
 	double[][] getData();
 
+	/**
+	 * Randomizes the values of the matrix between -&#949; and &#949;
+	 */
+	void randomizeWithEpsilon();
+
 }

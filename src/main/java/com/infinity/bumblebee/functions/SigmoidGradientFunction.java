@@ -18,7 +18,7 @@ public class SigmoidGradientFunction implements MatrixFunction {
 		
 		BumbleMatrix g = sigFunction.calculate(original);
 		BumbleMatrix ones = factory.createOnes(g.getRowDimension(), g.getColumnDimension());
-		BumbleMatrix g2 = utils.elementWiseSubstract(ones, g);
+		BumbleMatrix g2 = utils.elementWiseSubtract(ones, g);
 		BumbleMatrix sigGrad = utils.elementWiseMutilply(g, g2); 
 		
 		return sigGrad;
