@@ -65,7 +65,16 @@ public class BumbleMatrixUtilsTest {
 		assertThat(addition.getEntry(0, 0), is(equalTo(3d)));
 		assertThat(addition.getEntry(0, 1), is(equalTo(6d)));
 	}
-	
+
+	@Test
+	public void ensureScalarDivide() {
+		BumbleMatrix one = new BumbleMatrixFactory().createMatrix(new double[][]{{2, 4}});
+		BumbleMatrix divide = cut.scalarDivide(one, 2);
+		
+		assertThat(divide.getEntry(0, 0), is(equalTo(1d)));
+		assertThat(divide.getEntry(0, 1), is(equalTo(2d)));
+	}
+
 	@Test
 	public void ensureElementwiseSquare() {
 		BumbleMatrix one = new BumbleMatrixFactory().createMatrix(new double[][]{{1,2}, {3,4}});
@@ -101,5 +110,17 @@ public class BumbleMatrixUtilsTest {
 		
 		assertThat(oneColumn.getEntry(0, 0), is(equalTo(2d)));
 		assertThat(oneColumn.getEntry(1, 0), is(equalTo(4d)));
+	}
+	
+	@Test
+	public void ensureSum() {
+		BumbleMatrix original = new BumbleMatrixFactory().createMatrix(new double[][]{{1,2}, {3,4}});
+		BumbleMatrix sum = cut.sum(original);
+		
+		assertThat(sum.getRowDimension(), is(equalTo(1)));
+		assertThat(sum.getColumnDimension(), is(equalTo(2)));
+		
+		assertThat(sum.getEntry(0, 0), is(equalTo(4d)));
+		assertThat(sum.getEntry(0, 1), is(equalTo(6d)));
 	}
 }

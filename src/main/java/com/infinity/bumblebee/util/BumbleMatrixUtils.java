@@ -79,7 +79,7 @@ public class BumbleMatrixUtils {
 		return matrix;
 	}
 
-	public double sum(BumbleMatrix matrix) {
+	public double sumAll(BumbleMatrix matrix) {
 		double answer = 0;
 		for (int i = 0; i < matrix.getRowDimension(); i++) {
 			for (int j = 0; j < matrix.getColumnDimension(); j++) {
@@ -117,6 +117,29 @@ public class BumbleMatrixUtils {
 		for (int row = 0; row < original.getRowDimension(); row++) {
 			for (int column = 1; column < original.getColumnDimension(); column++) {
 				matrix.setEntry(row, column - 1, original.getEntry(row, column));
+			}
+		}
+		return matrix;
+	}
+
+	public BumbleMatrix sum(BumbleMatrix original) {
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(1, original.getColumnDimension());
+		for (int column = 0; column < original.getColumnDimension(); column++) {
+			double value = 0;
+			for (int row = 0; row < original.getRowDimension(); row++) {
+				value += original.getEntry(row, column);
+			}
+			matrix.setEntry(0, column, value);
+		}
+		return matrix;
+	}
+
+	public BumbleMatrix scalarDivide(BumbleMatrix original, double m) {
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(original.getRowDimension(), original.getColumnDimension());
+		for (int row = 0; row < original.getRowDimension(); row++) {
+			for (int column = 0; column < original.getColumnDimension(); column++) {
+				double val = original.getEntry(row, column) / m;
+				matrix.setEntry(row, column, val);
 			}
 		}
 		return matrix;

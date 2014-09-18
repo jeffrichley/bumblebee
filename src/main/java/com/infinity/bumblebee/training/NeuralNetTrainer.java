@@ -193,7 +193,7 @@ public class NeuralNetTrainer {
 			BumbleMatrix myThree = bmu.log(bmu.elementWiseSubtract(ones, a3));
 
 			// sumForM = sumForM + sum(myone - mytwo .* mythree);
-			sumForM += bmu.sum(bmu.elementWiseSubtract(myOne, bmu.elementWiseMutilply(myTwo, myThree)));
+			sumForM += bmu.sumAll(bmu.elementWiseSubtract(myOne, bmu.elementWiseMutilply(myTwo, myThree)));
 		}
 
 		double cost = sumForM / m;
@@ -202,7 +202,7 @@ public class NeuralNetTrainer {
 		if (lambda != 0) {
 			for (BumbleMatrix theta : thetas) {
 				BumbleMatrix squared = bmu.elementWiseSquare(theta);
-				regularizatonSummations += bmu.sum(squared);
+				regularizatonSummations += bmu.sumAll(squared);
 			}
 
 			regularization = (lambda / (2 * m)) * regularizatonSummations;
@@ -261,17 +261,17 @@ public class NeuralNetTrainer {
 			gradients.add(gradient);
 		}
 		
-		
-//		for (int i = 0; i < m; i++) {
-//			BumbleMatrix lastDelta
-//			bmu.printMatrixDetails("delta", delta);
-//		}
+		List<BumbleMatrix> finalGradients = new ArrayList<>();
+		for (BumbleMatrix gradient : gradients) {
+			BumbleMatrix finalGradient = bmu.scalarDivide(bmu.sum(gradient), m);
+			finalGradients.add(finalGradient);
+		}
 		
 		
 		// TODO: Implement regularization at the end
 		
 		
-		return new TrainingTuple(cost + regularization, gradients);
+		return new TrainingTuple(cost + regularization, finalGradients);
 	}
 
 	public List<BumbleMatrix> getThetas() {

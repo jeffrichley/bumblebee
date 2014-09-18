@@ -76,15 +76,23 @@ public class NeuralNetTrainerTest {
 //	@Ignore
 	public void ensureCostCalculationWithZeroLambda() {
 		TrainingTuple training = process(0);
-		double cost = training.getCost();
-		assertEquals(cost, 0.287629, 0.000001);
+		
+		assertEquals(training.getCost(), 0.287629, 0.000001);
 	}
 	
 	@Test
 	public void ensureCostCalculationWithOneLambda() {
 		TrainingTuple training = process(1);
-		double cost = training.getCost();
-		assertEquals(cost, 0.383770, 0.001);
+		
+		assertEquals(0.383770, training.getCost(), 0.001);
+	}
+	
+	@Test
+	public void ensureBackprop() {
+		TrainingTuple training = process(1);
+		
+		assertEquals(0.30936, training.getGradients().get(0).getEntry(0, 0), 0.001);
+		assertEquals(3.143688, training.getGradients().get(1).getEntry(0, 0), 0.001);
 	}
 
 	private TrainingTuple process(double lambda) {
