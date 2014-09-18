@@ -242,8 +242,8 @@ public class NeuralNetTrainer {
 		
 		// calculate gradients
 		List<BumbleMatrix> gradients = new ArrayList<>();
-		for (int index = thetas.size() - 1; index >= 0; index--) {
-			BumbleMatrix theta = thetas.get(index);
+		for (int index = as.size() - 2; index >= 0; index--) {
+			BumbleMatrix alpha = as.get(index);
 			BumbleMatrix delta = deltas.get(index);
 			
 			// if this is the first, we need to strip off the first
@@ -252,24 +252,66 @@ public class NeuralNetTrainer {
 				delta = bmu.removeFirstColumn(delta);
 			}
 			
-//			bmu.printMatrixDetails("delta", delta);
-//			bmu.printMatrixDetails("theta", theta);
+//			for (int i = 0; i < alpha.getColumnDimension(); i++) {
+//				System.out.print(alpha.getEntry(0, i) + " ");
+//				if (i % 16 == 0 && i != 0) {
+//					System.out.println();
+//				}
+//			}
 			
-			BumbleMatrix gradient = delta.multiply(theta);
+			BumbleMatrix grad = null;
+			for (int i = 0; i < m; i++) {
+				BumbleMatrix tmpd = factory.createMatrix(new double[][] {delta.getRow(i)});
+				BumbleMatrix tmpa = factory.createMatrix(new double[][] {alpha.getRow(i)});
+				
+				if (grad == null) {
+					grad = tmpd.transpose().multiply(tmpa);
+				} else {
+					grad = bmu.elementWiseAddition(grad, tmpd.transpose().multiply(tmpa));
+				}
+				
+//				System.out.println(grad.getEntry(0, 0));
+			}
+			
+			gradients.add(grad);
+			
+//			bmu.printMatrixDetails("grad", grad);
+			
+//			BumbleMatrix gradient = delta.multiply(alpha);
 //			bmu.printMatrixDetails("gradient", gradient);
 			
-			gradients.add(gradient);
+			
+//			for (int row = 0; row < grad.getRowDimension(); row++) {
+//				for (int column = 0; column < grad.getColumnDimension(); column++) {
+//					System.out.print(grad.getEntry(row, column) + " ");
+//				}
+//				System.out.println();
+//			}
+			
+			
+//			System.out.println();
+//			gradients.add(gradient);
 		}
 		
 		List<BumbleMatrix> finalGradients = new ArrayList<>();
 		for (BumbleMatrix gradient : gradients) {
-			BumbleMatrix finalGradient = bmu.scalarDivide(bmu.sum(gradient), m);
+			BumbleMatrix finalGradient = bmu.scalarDivide(gradient, m);
 			finalGradients.add(finalGradient);
+			
+//			for (int row = 0; row < finalGradient.getRowDimension(); row++) {
+//				for (int column = 0; column < finalGradient.getColumnDimension(); column++) {
+//					System.out.print(finalGradient.getEntry(row, column) + " ");
+//				}
+//				System.out.println();
+//			}
+//			
+//			System.out.println("******************");
 		}
 		
 		
 		// TODO: Implement regularization at the end
 		
+		Collections.reverse(finalGradients);
 		
 		return new TrainingTuple(cost + regularization, finalGradients);
 	}

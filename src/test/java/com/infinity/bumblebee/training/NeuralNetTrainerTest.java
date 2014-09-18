@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
@@ -28,14 +29,12 @@ public class NeuralNetTrainerTest {
 	}
 
 	@Test
-//	@Ignore
 	public void ensureNumberOfLayers() {
 		assertThat(twoOne.getNumberOfThetas(), is(equalTo(1)));
 		assertThat(threeTwoOne.getNumberOfThetas(), is(equalTo(2)));
 	}
 	
 	@Test
-//	@Ignore
 	public void ensureThetasAreRandomized() {
 		List<BumbleMatrix> thetas = twoOne.getThetas();
 		for (BumbleMatrix theta : thetas) {
@@ -48,7 +47,6 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void ensureProperSizingOfTheta() {
 		// a 2 input and 1 input should have a theta of 1x3
 		assertThat(twoOne.getSizeOfTheta(0).getOne(), is(equalTo(1)));
@@ -63,7 +61,6 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void ensureLambdaSettable() {
 		// lambda should start at 0
 		assertThat(twoOne.getLambda(), is(equalTo(0d)));
@@ -73,7 +70,6 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void ensureCostCalculationWithZeroLambda() {
 		TrainingTuple training = process(0);
 		
@@ -91,8 +87,8 @@ public class NeuralNetTrainerTest {
 	public void ensureBackprop() {
 		TrainingTuple training = process(1);
 		
-		assertEquals(0.30936, training.getGradients().get(0).getEntry(0, 0), 0.001);
-		assertEquals(3.143688, training.getGradients().get(1).getEntry(0, 0), 0.001);
+		assertEquals(6.1871e-05, training.getGradients().get(0).getEntry(0, 0), 0.00001);
+		assertEquals(6.2874e-04, training.getGradients().get(1).getEntry(0, 0), 0.00001);
 	}
 
 	private TrainingTuple process(double lambda) {
