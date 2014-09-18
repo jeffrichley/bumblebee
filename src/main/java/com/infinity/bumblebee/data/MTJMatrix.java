@@ -111,7 +111,7 @@ public class MTJMatrix implements BumbleMatrix {
 		Random r = new Random(System.currentTimeMillis());
 		for (int row = 0; row < matrix.numRows(); row++) {
 			for (int column = 0; column < matrix.numColumns(); column++) {
-				double value = r.nextDouble() * .12;
+				double value = r.nextDouble() * epsilon;
 				if (r.nextDouble() < 0.5) {
 					value = value * -1;
 				}

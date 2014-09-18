@@ -17,6 +17,6 @@ public interface CostFunction {
 	 * @return a tuple consists of J (cost) and a vector X which is the gradient
 	 *         of the input.
 	 */
-	public CostGradientTuple evaluateCost(DoubleVector input);
+	CostGradientTuple evaluateCost(DoubleVector input);
 
 }

@@ -111,4 +111,14 @@ public class BumbleMatrixUtils {
 		
 		return new BumbleMatrixFactory().createMatrix(answer);
 	}
+
+	public BumbleMatrix removeFirstColumn(BumbleMatrix original) {
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(original.getRowDimension(), original.getColumnDimension() - 1);
+		for (int row = 0; row < original.getRowDimension(); row++) {
+			for (int column = 1; column < original.getColumnDimension(); column++) {
+				matrix.setEntry(row, column - 1, original.getEntry(row, column));
+			}
+		}
+		return matrix;
+	}
 }

@@ -57,7 +57,7 @@ public final class Fmincg extends AbstractMinimizer {
 
   // extrapolate maximum 3 times the current bracket.
   // this can be set higher for bigger extrapolations
-  public static double EXT = 3.0;
+  public static final double EXT = 3.0;
 
   // a bunch of constants for line searches
   private static final double RHO = 0.01;

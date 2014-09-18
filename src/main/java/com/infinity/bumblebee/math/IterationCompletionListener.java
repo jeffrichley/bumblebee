@@ -16,7 +16,7 @@ public interface IterationCompletionListener {
    * @param cost the cost at the current iteration.
    * @param currentWeights the current optimal weights.
    */
-  public void onIterationFinished(int iteration, double cost,
+  void onIterationFinished(int iteration, double cost,
       DoubleVector currentWeights);
 
 }

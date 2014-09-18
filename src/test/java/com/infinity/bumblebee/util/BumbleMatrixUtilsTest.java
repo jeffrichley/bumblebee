@@ -90,4 +90,16 @@ public class BumbleMatrixUtilsTest {
 		assertThat(answer.getEntry(0, 0), is(equalTo(0d)));
 		assertThat(answer.getEntry(0, 1), is(equalTo(1d)));
 	}
+	
+	@Test
+	public void ensureRemovingFirstColumn() {
+		BumbleMatrix twoColumns = new BumbleMatrixFactory().createMatrix(new double[][]{{1,2}, {3,4}});
+		BumbleMatrix oneColumn = cut.removeFirstColumn(twoColumns);
+		
+		assertThat(oneColumn.getColumnDimension(), is(equalTo(1)));
+		assertThat(oneColumn.getRowDimension(), is(equalTo(2)));
+		
+		assertThat(oneColumn.getEntry(0, 0), is(equalTo(2d)));
+		assertThat(oneColumn.getEntry(1, 0), is(equalTo(4d)));
+	}
 }

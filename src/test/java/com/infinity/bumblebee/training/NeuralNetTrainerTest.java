@@ -1,4 +1,4 @@
-package com.infinity.bumblebee;
+package com.infinity.bumblebee.training;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
+import com.infinity.bumblebee.data.TrainingTuple;
 import com.infinity.bumblebee.util.DataReader;
 
 public class NeuralNetTrainerTest {
@@ -28,14 +28,14 @@ public class NeuralNetTrainerTest {
 	}
 
 	@Test
-	@Ignore
+//	@Ignore
 	public void ensureNumberOfLayers() {
 		assertThat(twoOne.getNumberOfThetas(), is(equalTo(1)));
 		assertThat(threeTwoOne.getNumberOfThetas(), is(equalTo(2)));
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void ensureThetasAreRandomized() {
 		List<BumbleMatrix> thetas = twoOne.getThetas();
 		for (BumbleMatrix theta : thetas) {
@@ -48,7 +48,7 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void ensureProperSizingOfTheta() {
 		// a 2 input and 1 input should have a theta of 1x3
 		assertThat(twoOne.getSizeOfTheta(0).getOne(), is(equalTo(1)));
@@ -63,7 +63,7 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void ensureLambdaSettable() {
 		// lambda should start at 0
 		assertThat(twoOne.getLambda(), is(equalTo(0d)));
@@ -73,19 +73,21 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void ensureCostCalculationWithZeroLambda() {
-		double cost = process(0);
+		TrainingTuple training = process(0);
+		double cost = training.getCost();
 		assertEquals(cost, 0.287629, 0.000001);
 	}
 	
 	@Test
 	public void ensureCostCalculationWithOneLambda() {
-		double cost = process(1);
+		TrainingTuple training = process(1);
+		double cost = training.getCost();
 		assertEquals(cost, 0.383770, 0.001);
 	}
 
-	private double process(double lambda) {
+	private TrainingTuple process(double lambda) {
 		DataReader reader = new DataReader();
 		BumbleMatrix theta1 = reader.getMatrixFromFile("./test-data/Theta1.csv");
 		BumbleMatrix theta2 = reader.getMatrixFromFile("./test-data/Theta2.csv");

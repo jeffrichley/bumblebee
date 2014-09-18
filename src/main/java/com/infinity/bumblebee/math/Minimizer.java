@@ -17,7 +17,7 @@ public interface Minimizer {
    * @param verbose if TRUE it will print progress.
    * @return the optimized theta parameters.
    */
-  public DoubleVector minimize(CostFunction f, DoubleVector theta,
+  DoubleVector minimize(CostFunction f, DoubleVector theta,
       int maxIterations, boolean verbose);
 
 }
