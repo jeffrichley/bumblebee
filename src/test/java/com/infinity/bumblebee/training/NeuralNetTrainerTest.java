@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
@@ -87,8 +86,17 @@ public class NeuralNetTrainerTest {
 	public void ensureBackprop() {
 		TrainingTuple training = process(1);
 		
-		assertEquals(6.1871e-05, training.getGradients().get(0).getEntry(0, 0), 0.00001);
-		assertEquals(6.2874e-04, training.getGradients().get(1).getEntry(0, 0), 0.00001);
+//		without regularization
+//		assertEquals(6.1871e-05, training.getGradients().get(0).getEntry(0, 0), 0.000001);
+//		assertEquals(6.2874e-04, training.getGradients().get(1).getEntry(0, 0), 0.000001);
+//		assertEquals(0, training.getGradients().get(0).getEntry(0, 1), 0.000001);
+//		assertEquals(7.5095e-04, training.getGradients().get(1).getEntry(0, 1), 0.000001);
+		
+		// with regularization
+		assertEquals(6.1871e-05, training.getGradients().get(0).getEntry(0, 0), 0.000001);
+		assertEquals(-2.1125e-12, training.getGradients().get(0).getEntry(0, 1), 0.000001);
+		assertEquals(3.1437, training.getGradients().get(1).getEntry(0, 0), 0.000001);
+		assertEquals(3.7547, training.getGradients().get(1).getEntry(0, 1), 0.000001);
 	}
 
 	private TrainingTuple process(double lambda) {
