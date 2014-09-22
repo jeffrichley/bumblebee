@@ -76,10 +76,12 @@ public class NeuralNetTrainerTest {
 	}
 	
 	@Test
-	public void ensureCostCalculationWithOneLambda() {
+	public void ensureCostCalculationWithNonZeroLambda() {
 		TrainingTuple training = process(1);
-		
 		assertEquals(0.383770, training.getCost(), 0.001);
+		
+		training = process(3);
+		assertEquals(0.578, training.getCost(), 0.001);
 	}
 	
 	@Test
@@ -93,10 +95,10 @@ public class NeuralNetTrainerTest {
 //		assertEquals(7.5095e-04, training.getGradients().get(1).getEntry(0, 1), 0.000001);
 		
 		// with regularization
-		assertEquals(6.1871e-05, training.getGradients().get(0).getEntry(0, 0), 0.000001);
-		assertEquals(-2.1125e-12, training.getGradients().get(0).getEntry(0, 1), 0.000001);
-		assertEquals(3.1437, training.getGradients().get(1).getEntry(0, 0), 0.000001);
-		assertEquals(3.7547, training.getGradients().get(1).getEntry(0, 1), 0.000001);
+		assertEquals(6.1871e-05, training.getGradients().get(0).getEntry(0, 0), 0.00000001);
+		assertEquals(-2.1125e-12, training.getGradients().get(0).getEntry(0, 1), 0.00000001);
+		assertEquals(6.2874e-04, training.getGradients().get(1).getEntry(0, 0), 0.00000001);
+		assertEquals(5.0846e-04, training.getGradients().get(1).getEntry(0, 1), 0.00000001);
 	}
 
 	private TrainingTuple process(double lambda) {

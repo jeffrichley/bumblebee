@@ -10,6 +10,7 @@ import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.data.IntegerTuple;
 import com.infinity.bumblebee.data.TrainingTuple;
+import com.infinity.bumblebee.functions.GradientRegularizationFunction;
 import com.infinity.bumblebee.functions.MatrixFunction;
 import com.infinity.bumblebee.functions.SigmoidFunction;
 import com.infinity.bumblebee.functions.SigmoidGradientFunction;
@@ -24,7 +25,7 @@ import com.infinity.bumblebee.util.BumbleMatrixUtils;
  */
 public class NeuralNetTrainer {
 
-	private final List<BumbleMatrix> thetas;
+	private List<BumbleMatrix> thetas;
 	private double lambda = 0;
 	private final MatrixFunction function = new SigmoidFunction();
 	private final MatrixFunction sigmoidGradientFunction = new SigmoidGradientFunction();
@@ -138,8 +139,6 @@ public class NeuralNetTrainer {
 
 		a = a.transpose();
 		
-//		 bmu.printMatrixDetails("a", a);
-
 		// Code Marker #1
 
 		double[][] yVecData = new double[m][numLabels];
@@ -154,14 +153,7 @@ public class NeuralNetTrainer {
 		}
 		BumbleMatrix yMatrix = factory.createMatrix(yVecData);
 		
-		// bmu.printMatrixDetails("yMatrix", yMatrix);
-
 		BumbleMatrix myOnes = factory.createMatrix(a.getRowDimension(), a.getColumnDimension());
-		// bmu.printMatrixDetails("myOnes", myOnes);
-		// for (int i = 0; i < myOnes.getRowDimension(); i++) {
-		// double[] row = myOnes.getRow(i);
-		// Arrays.fill(row, 1);
-		// }
 		myOnes.fill(1d);
 		
 		double sumForM = 0;
@@ -212,12 +204,6 @@ public class NeuralNetTrainer {
 		// back propagation here
 		List<BumbleMatrix> deltas = new ArrayList<>();
 		
-//		bmu.printMatrixDetails("a1", as.get(0));
-//		bmu.printMatrixDetails("a2", as.get(1));
-//		bmu.printMatrixDetails("a3", as.get(2));
-//		bmu.printMatrixDetails("z2", zs.get(0));
-//		bmu.printMatrixDetails("z3", zs.get(1));
-		
 		int zIndex = zs.size() - 2;
 		int thetaIndex = thetas.size() - 1;
 		int alphaIndex = as.size() - 1;
@@ -227,14 +213,8 @@ public class NeuralNetTrainer {
 		deltas.add(previousDelta);
 		while (thetaIndex > 0) {
 			BumbleMatrix theta = thetas.get(thetaIndex--);
-//			bmu.printMatrixDetails("z", zs.get(zIndex));
 			BumbleMatrix sigGrad = sigmoidGradientFunction.calculate(zs.get(zIndex--));
-//			bmu.printMatrixDetails("theta transpose", theta.transpose());
-//			bmu.printMatrixDetails("prev delta", previousDelta.transpose());
-//			bmu.printMatrixDetails("siggrad", sigGrad);
-//			bmu.printMatrixDetails("mult", theta.transpose().multiply(previousDelta.transpose()));
 			previousDelta = bmu.elementWiseMutilply(theta.transpose().multiply(previousDelta.transpose()).transpose(), sigGrad);
-//			bmu.printMatrixDetails("delta", previousDelta);
 			deltas.add(previousDelta);
 		}
 		
@@ -252,13 +232,6 @@ public class NeuralNetTrainer {
 				delta = bmu.removeFirstColumn(delta);
 			}
 			
-//			for (int i = 0; i < alpha.getColumnDimension(); i++) {
-//				System.out.print(alpha.getEntry(0, i) + " ");
-//				if (i % 16 == 0 && i != 0) {
-//					System.out.println();
-//				}
-//			}
-			
 			BumbleMatrix grad = null;
 			for (int i = 0; i < m; i++) {
 				BumbleMatrix tmpd = factory.createMatrix(new double[][] {delta.getRow(i)});
@@ -269,54 +242,33 @@ public class NeuralNetTrainer {
 				} else {
 					grad = bmu.elementWiseAddition(grad, tmpd.transpose().multiply(tmpa));
 				}
-				
-//				System.out.println(grad.getEntry(0, 0));
 			}
 			
 			gradients.add(grad);
-			
-//			bmu.printMatrixDetails("grad", grad);
-			
-//			BumbleMatrix gradient = delta.multiply(alpha);
-//			bmu.printMatrixDetails("gradient", gradient);
-			
-			
-//			for (int row = 0; row < grad.getRowDimension(); row++) {
-//				for (int column = 0; column < grad.getColumnDimension(); column++) {
-//					System.out.print(grad.getEntry(row, column) + " ");
-//				}
-//				System.out.println();
-//			}
-			
-			
-//			System.out.println();
-//			gradients.add(gradient);
 		}
+		
+
+		Collections.reverse(gradients);
+		GradientRegularizationFunction gradReg = new GradientRegularizationFunction(m, lambda);
 		
 		List<BumbleMatrix> finalGradients = new ArrayList<>();
-		for (BumbleMatrix gradient : gradients) {
-			BumbleMatrix finalGradient = bmu.scalarDivide(gradient, m);
-			finalGradients.add(finalGradient);
 			
-//			for (int row = 0; row < finalGradient.getRowDimension(); row++) {
-//				for (int column = 0; column < finalGradient.getColumnDimension(); column++) {
-//					System.out.print(finalGradient.getEntry(row, column) + " ");
-//				}
-//				System.out.println();
-//			}
-//			
-//			System.out.println("******************");
+		for (int i = 0; i < thetas.size(); i++) {
+			BumbleMatrix theta = thetas.get(i);
+			BumbleMatrix gradient = gradients.get(i);
+			
+			BumbleMatrix finalGradient = gradReg.calculate(theta, gradient);
+			finalGradients.add(finalGradient);
 		}
-		
-		
-		// TODO: Implement regularization at the end
-		
-		Collections.reverse(finalGradients);
 		
 		return new TrainingTuple(cost + regularization, finalGradients);
 	}
 
 	public List<BumbleMatrix> getThetas() {
 		return thetas;
+	}
+
+	public void setThetas(List<BumbleMatrix> thetas) {
+		this.thetas = thetas;
 	}
 }

@@ -2,7 +2,10 @@ package com.infinity.bumblebee.util;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -74,6 +77,15 @@ public class BumbleMatrixUtilsTest {
 		assertThat(divide.getEntry(0, 0), is(equalTo(1d)));
 		assertThat(divide.getEntry(0, 1), is(equalTo(2d)));
 	}
+	
+	@Test
+	public void ensureScalarMultiply() {
+		BumbleMatrix one = new BumbleMatrixFactory().createMatrix(new double[][]{{2, 4}, {1, .5}});
+		BumbleMatrix divide = cut.scalarMultiply(one, 2);
+		
+		assertThat(divide.getEntry(0, 0), is(equalTo(4d)));
+		assertThat(divide.getEntry(0, 1), is(equalTo(8d)));
+	}
 
 	@Test
 	public void ensureElementwiseSquare() {
@@ -122,5 +134,79 @@ public class BumbleMatrixUtilsTest {
 		
 		assertThat(sum.getEntry(0, 0), is(equalTo(4d)));
 		assertThat(sum.getEntry(0, 1), is(equalTo(6d)));
+	}
+	
+	@Test
+	public void ensureUnrolling() {
+		BumbleMatrix original = new BumbleMatrixFactory().createMatrix(new double[][]{{1,2}, {3,4}});
+		BumbleMatrix unrolled = cut.unroll(original);
+		
+		assertThat(unrolled.getRowDimension(), is(equalTo(4)));
+		assertThat(unrolled.getColumnDimension(), is(equalTo(1)));
+		
+		assertThat(unrolled.getEntry(0, 0), is(equalTo(1d)));
+		assertThat(unrolled.getEntry(1, 0), is(equalTo(3d)));
+		assertThat(unrolled.getEntry(2, 0), is(equalTo(2d)));
+		assertThat(unrolled.getEntry(3, 0), is(equalTo(4d)));
+	}
+	
+	@Test
+	public void ensureUnrollingMultipleMatrices() {
+		BumbleMatrix one = new BumbleMatrixFactory().createMatrix(new double[][]{{1,2}, {3,4}});
+		BumbleMatrix two = new BumbleMatrixFactory().createMatrix(new double[][]{{5,6}, {7,8}});
+		BumbleMatrix unrolled = cut.unroll(one, two);
+		
+		assertThat(unrolled.getRowDimension(), is(equalTo(8)));
+		assertThat(unrolled.getColumnDimension(), is(equalTo(1)));
+		
+		assertThat(unrolled.getEntry(0, 0), is(equalTo(1d)));
+		assertThat(unrolled.getEntry(1, 0), is(equalTo(3d)));
+		assertThat(unrolled.getEntry(2, 0), is(equalTo(2d)));
+		assertThat(unrolled.getEntry(3, 0), is(equalTo(4d)));
+		
+		assertThat(unrolled.getEntry(4, 0), is(equalTo(5d)));
+		assertThat(unrolled.getEntry(5, 0), is(equalTo(7d)));
+		assertThat(unrolled.getEntry(6, 0), is(equalTo(6d)));
+		assertThat(unrolled.getEntry(7, 0), is(equalTo(8d)));
+	}
+	
+	@Test
+	public void ensureReshaping() {
+		BumbleMatrix original = new BumbleMatrixFactory().createMatrix(new double[][]{{1},{2},{3},{4},{5},{6}});
+		BumbleMatrix reshape = cut.reshape(original, 2, 3);
+		
+		assertThat(reshape.getRowDimension(), is(equalTo(2)));
+		assertThat(reshape.getColumnDimension(), is(equalTo(3)));
+		
+		assertThat(reshape.getEntry(0, 0), is(equalTo(1d)));
+		assertThat(reshape.getEntry(0, 1), is(equalTo(3d)));
+		assertThat(reshape.getEntry(0, 2), is(equalTo(5d)));
+		assertThat(reshape.getEntry(1, 0), is(equalTo(2d)));
+		assertThat(reshape.getEntry(1, 1), is(equalTo(4d)));
+		assertThat(reshape.getEntry(1, 2), is(equalTo(6d)));
+	}
+	
+	@Test
+	public void ensureReshapingMultipleMatrices() {
+		BumbleMatrix original = new BumbleMatrixFactory().createMatrix(new double[][]{{1},{3},{2},{4},{5},{7},{6},{8}});
+		List<BumbleMatrix> reshapes = cut.reshape(original, new int[]{2, 2, 2, 2});
+		
+		assertThat(reshapes.size(), is(equalTo(2)));
+		
+		assertThat(reshapes.get(0).getRowDimension(), is(equalTo(2)));
+		assertThat(reshapes.get(0).getColumnDimension(), is(equalTo(2)));
+		assertThat(reshapes.get(1).getRowDimension(), is(equalTo(2)));
+		assertThat(reshapes.get(1).getColumnDimension(), is(equalTo(2)));
+
+		assertThat(reshapes.get(0).getEntry(0, 0), is(equalTo(1d)));
+		assertThat(reshapes.get(0).getEntry(0, 1), is(equalTo(2d)));
+		assertThat(reshapes.get(0).getEntry(1, 0), is(equalTo(3d)));
+		assertThat(reshapes.get(0).getEntry(1, 1), is(equalTo(4d)));
+		
+		assertThat(reshapes.get(1).getEntry(0, 0), is(equalTo(5d)));
+		assertThat(reshapes.get(1).getEntry(0, 1), is(equalTo(6d)));
+		assertThat(reshapes.get(1).getEntry(1, 0), is(equalTo(7d)));
+		assertThat(reshapes.get(1).getEntry(1, 1), is(equalTo(8d)));
+
 	}
 }
