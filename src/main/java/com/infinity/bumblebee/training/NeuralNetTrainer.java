@@ -146,10 +146,25 @@ public class NeuralNetTrainer {
 		for (double[] ds : yVecData) {
 			Arrays.fill(ds, 0);
 		}
-		// set the value from the original y into the yk's indexed element
-		for (int i = 0; i < y.getRowDimension(); i++) {
-			int val = (int) y.getRow(i)[0];
-			yVecData[i][val] = 1.0;
+		
+		// We have different behaviors if there is one output vs many outputs.
+		// If there are many outputs, we need to put a one in the y vector
+		// at the index of the value given, but if there is only one output,
+		// the one value needs to be set to the value sent into this function
+		// in the y matrix.
+		
+		if (numLabels > 1) {
+			// set the value from the original y into the yk's indexed element
+			for (int i = 0; i < y.getRowDimension(); i++) {
+				int val = (int) y.getRow(i)[0];
+				yVecData[i][val] = 1.0;
+			}
+		} else {
+			// there is only one output, so we put the y value into the first element
+			for (int i = 0; i < y.getRowDimension(); i++) {
+				int val = (int) y.getRow(i)[0];
+				yVecData[i][0] = val;
+			}
 		}
 		BumbleMatrix yMatrix = factory.createMatrix(yVecData);
 		

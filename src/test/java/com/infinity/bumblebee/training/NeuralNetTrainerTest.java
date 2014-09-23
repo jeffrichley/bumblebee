@@ -3,6 +3,7 @@ package com.infinity.bumblebee.training;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
+import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.data.TrainingTuple;
 import com.infinity.bumblebee.util.DataReader;
 
@@ -20,10 +22,12 @@ public class NeuralNetTrainerTest {
 
 	private NeuralNetTrainer twoOne;
 	private NeuralNetTrainer threeTwoOne;
+	private NeuralNetTrainer twoTwoOne;
 	
 	@Before
 	public void setUp() throws Exception {
 		twoOne = new NeuralNetTrainer(2, 1);
+		twoTwoOne = new NeuralNetTrainer(2, 2, 1);
 		threeTwoOne = new NeuralNetTrainer(3, 2, 1);
 	}
 
@@ -88,12 +92,6 @@ public class NeuralNetTrainerTest {
 	public void ensureBackprop() {
 		TrainingTuple training = process(1);
 		
-//		without regularization
-//		assertEquals(6.1871e-05, training.getGradients().get(0).getEntry(0, 0), 0.000001);
-//		assertEquals(6.2874e-04, training.getGradients().get(1).getEntry(0, 0), 0.000001);
-//		assertEquals(0, training.getGradients().get(0).getEntry(0, 1), 0.000001);
-//		assertEquals(7.5095e-04, training.getGradients().get(1).getEntry(0, 1), 0.000001);
-		
 		// with regularization
 		assertEquals(6.1871e-05, training.getGradients().get(0).getEntry(0, 0), 0.00000001);
 		assertEquals(-2.1125e-12, training.getGradients().get(0).getEntry(0, 1), 0.00000001);
@@ -120,6 +118,18 @@ public class NeuralNetTrainerTest {
 		
 		NeuralNetTrainer cut = new NeuralNetTrainer(thetas);
 		return cut.calculateCost(X, y, 10, lambda);
+	}
+	
+	@Test
+	public void ensureWorksWithOneOutput() {
+		BumbleMatrixFactory factory = new BumbleMatrixFactory();
+		BumbleMatrix X = factory.createMatrix(new double[][]{{1,1}, {1,0}, {0,1}, {0,0}});
+		BumbleMatrix y = factory.createMatrix(new double[][]{{0}, {1}, {1}, {0}});
+		
+		TrainingTuple cost = twoTwoOne.calculateCost(X, y, 1, 1);
+		
+		// if we get here it didn't blow up, woot!
+		assertThat(cost.getCost(), is(lessThan(1.0)));
 	}
 
 }

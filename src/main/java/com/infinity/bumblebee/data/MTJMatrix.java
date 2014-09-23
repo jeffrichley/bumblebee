@@ -6,6 +6,8 @@ import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.MatrixEntry;
 
 public class MTJMatrix implements BumbleMatrix {
+	
+	private static final Random RANDOM = new Random(System.currentTimeMillis());
 
 	private final DenseMatrix matrix;
 	
@@ -108,11 +110,11 @@ public class MTJMatrix implements BumbleMatrix {
 		if (epsilon > 0.12) {
 			epsilon = 0.12;
 		}
-		Random r = new Random(System.currentTimeMillis());
+		
 		for (int row = 0; row < matrix.numRows(); row++) {
 			for (int column = 0; column < matrix.numColumns(); column++) {
-				double value = r.nextDouble() * epsilon;
-				if (r.nextDouble() < 0.5) {
+				double value = RANDOM.nextDouble() * epsilon;
+				if (RANDOM.nextDouble() < 0.5) {
 					value = value * -1;
 				}
 				matrix.set(row, column, value);
