@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
@@ -62,6 +63,7 @@ public class FmincgTest {
 	}
 
 	@Test
+	@Ignore
 	public void ensureRuns() {
 		Fmincg min = new Fmincg();
 		
@@ -90,7 +92,7 @@ public class FmincgTest {
 			BumbleMatrix input = factory.createMatrix(new double[][]{values});
 			BumbleMatrix prediction = net.predict(input);
 			
-			if (correct(prediction, (int) (y.getEntry(i, 0)))) {
+			if (isCorrect(prediction, (int) (y.getEntry(i, 0)))) {
 				correctCount++;
 			}
 		}
@@ -100,7 +102,7 @@ public class FmincgTest {
 		System.out.println((double)correctCount / (double)X.getRowDimension());
 	}
 
-	private boolean correct(BumbleMatrix prediction, int entry) {
+	private boolean isCorrect(BumbleMatrix prediction, int entry) {
 		double val = prediction.getEntry(0, entry);
 		for (int i = 0; i < prediction.getColumnDimension(); i++) {
 			double tmp = prediction.getEntry(0, i);
