@@ -1,4 +1,12 @@
-bumblebee
+Bumblebee Artificial Intelligence Library
 =========
 
-Artificial Intelligence Framework
+Bumblebee is an easy to use neural network library created with speed and ease of training in mind.
+
+An Example Usage
+---------
+
+```java
+import static com.infinity.bumblebee.training.net.NetworkDSL.usingTrainingData;
+
+```
