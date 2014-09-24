@@ -1,5 +1,7 @@
 package com.infinity.bumblebee.training.net;
 
+import java.util.Arrays;
+
 public class NetworkTrainerConfiguration {
 
 	private String testDataFileName;
@@ -13,7 +15,7 @@ public class NetworkTrainerConfiguration {
 		this.testDataFileName = testDataFileName;
 		this.columnsOfInputs = layers[0];
 		this.columnsOfExpectedOuputs = layers[layers.length - 1];
-		this.layers = layers;
+		this.layers = Arrays.copyOf(layers, layers.length);
 		this.lambda = lambda;
 		this.maxTrainingIterations = maxTrainingIterations;
 	}
@@ -31,7 +33,7 @@ public class NetworkTrainerConfiguration {
 	}
 
 	public int[] getLayers() {
-		return layers;
+		return Arrays.copyOf(layers, layers.length);
 	}
 
 	public double getLambda() {
@@ -42,4 +44,27 @@ public class NetworkTrainerConfiguration {
 		return maxTrainingIterations;
 	}
 
+	void setTestDataFileName(String testDataFileName) {
+		this.testDataFileName = testDataFileName;
+	}
+
+	void setColumnsOfInputs(int columnsOfInputs) {
+		this.columnsOfInputs = columnsOfInputs;
+	}
+
+	void setColumnsOfExpectedOuputs(int columnsOfExpectedOuputs) {
+		this.columnsOfExpectedOuputs = columnsOfExpectedOuputs;
+	}
+
+	void setLayers(int[] layers) {
+		this.layers = layers;
+	}
+
+	void setLambda(double lambda) {
+		this.lambda = lambda;
+	}
+
+	void setMaxTrainingIterations(int maxTrainingIterations) {
+		this.maxTrainingIterations = maxTrainingIterations;
+	}
 }

@@ -17,7 +17,7 @@
   <property name="severity" value="error"/>
 
   <module name="SuppressionFilter">
-    <property name="file" value="${checkstyle.suppressions.file}"/>
+    <property name="file" value="src/main/resources/checkstyle-suppressions.xml"/>
   </module>
 
   <module name="JavadocPackage">
