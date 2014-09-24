@@ -21,10 +21,9 @@ public class TrainingDataLoader {
 				double value = matrixFromFile.getEntry(row, count++);
 				inputs.setEntry(row, i, value);
 			}
-			for (int i = 0; i < config.getColumnsOfExpectedOuputs(); i++) {
-				double value = matrixFromFile.getEntry(row, count++);
-				outputs.setEntry(row, i, value);
-			}
+			
+			double expected = matrixFromFile.getEntry(row, count);
+			outputs.setEntry(row, 0, expected);
 		}
 		
 		MatrixTuple tuple = new MatrixTuple(inputs, outputs);

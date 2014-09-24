@@ -1,7 +1,8 @@
 package com.infinity.bumblebee.training.net;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -11,7 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
-import com.infinity.bumblebee.training.NeuralNet;
+import com.infinity.bumblebee.data.BumbleMatrixFactory;
+import com.infinity.bumblebee.network.NeuralNet;
+import com.infinity.bumblebee.network.Prediction;
 import com.infinity.bumblebee.training.NeuralNetTrainer;
 
 public class NetworkTrainerTest {
@@ -21,14 +24,14 @@ public class NetworkTrainerTest {
 	@Before
 	public void setup() {
 		NetworkTrainerConfiguration config = new NetworkTrainerConfiguration();
-		config.setTrainingData("./test-data/iris.csv", 1000, 0.3, 4, 4, 1);
+		config.setTrainingData("./test-data/iris.csv", 100, 0.3, 4, 4, 3);
 		
 		cut = new NetworkTrainer(config);
 	}
 
 	@Test
 	public void ensureKnowsMaxTrainingIterations() {
-		assertThat(cut.getMaxTrainingIterations(), is(equalTo(1000)));
+		assertThat(cut.getMaxTrainingIterations(), is(equalTo(100)));
 	}
 	
 	@Test
@@ -57,9 +60,26 @@ public class NetworkTrainerTest {
 	
 	@Test
 	public void ensureCanTrain() {
-		NeuralNet network = cut.train(true);
+		NeuralNet network = cut.train(false);
 		
 		assertThat(network, is(notNullValue()));
+		
+		BumbleMatrixFactory factory = new BumbleMatrixFactory();
+		BumbleMatrix x = cut.getInputData();
+		BumbleMatrix y = cut.getOutputData();
+		
+		int correctCount = 0;
+		for (int i = 0; i < x.getRowDimension(); i++) {
+			double[] values = x.getRow(i);
+			BumbleMatrix input = factory.createMatrix(new double[][]{values});
+			Prediction prediction = network.predict(input);
+			
+			if (prediction.getAnswer() == (int)y.getEntry(i, 0)) {
+				correctCount++;
+			}
+		}
+		
+		assertThat(correctCount, is(greaterThan(145)));
 	}
 
 }

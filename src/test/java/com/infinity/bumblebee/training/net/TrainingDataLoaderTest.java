@@ -15,7 +15,7 @@ public class TrainingDataLoaderTest {
 	@Test
 	public void ensureLoadsData() {
 		NetworkTrainerConfiguration config = new NetworkTrainerConfiguration();
-		config.setTrainingData("./test-data/iris.csv", 4, 4, 1);
+		config.setTrainingData("./test-data/iris.csv", 100, 0.3, 4, 4, 3);
 		
 		TrainingDataLoader loader = new TrainingDataLoader();
 		MatrixTuple tuple = loader.loadData(config);
@@ -29,7 +29,7 @@ public class TrainingDataLoaderTest {
 		assertThat(input.getRowDimension(), is(equalTo(150)));
 		assertThat(input.getColumnDimension(), is(equalTo(4)));
 		assertThat(output.getRowDimension(), is(equalTo(150)));
-		assertThat(output.getColumnDimension(), is(equalTo(1)));
+		assertThat(output.getColumnDimension(), is(equalTo(3)));
 		
 		assertThat(input.getEntry(0, 0), is(equalTo(5.1)));
 		assertThat(input.getEntry(0, 1), is(equalTo(3.5)));

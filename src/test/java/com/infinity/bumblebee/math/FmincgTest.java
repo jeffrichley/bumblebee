@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
-import com.infinity.bumblebee.training.NeuralNet;
+import com.infinity.bumblebee.network.NeuralNet;
 import com.infinity.bumblebee.training.NeuralNetTrainer;
 import com.infinity.bumblebee.training.NeuralNetTrainerCostFunction;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
@@ -90,7 +90,7 @@ public class FmincgTest {
 		for (int i = 0; i < X.getRowDimension(); i++) {
 			double[] values = X.getRow(i);
 			BumbleMatrix input = factory.createMatrix(new double[][]{values});
-			BumbleMatrix prediction = net.predict(input);
+			BumbleMatrix prediction = net.calculate(input);
 			
 			if (isCorrect(prediction, (int) (y.getEntry(i, 0)))) {
 				correctCount++;

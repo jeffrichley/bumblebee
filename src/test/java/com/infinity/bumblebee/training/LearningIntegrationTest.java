@@ -17,6 +17,7 @@ import com.infinity.bumblebee.math.CostFunction;
 import com.infinity.bumblebee.math.DoubleVector;
 import com.infinity.bumblebee.math.Fmincg;
 import com.infinity.bumblebee.math.IterationCompletionListener;
+import com.infinity.bumblebee.network.NeuralNet;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 import com.infinity.bumblebee.util.MathBridge;
 
@@ -79,10 +80,10 @@ public class LearningIntegrationTest {
 		printPredictions(net);
 		
 		// here are our answers
-		BumbleMatrix oneoneAnswer = net.predict(oneone);
-		BumbleMatrix onezeroAnswer = net.predict(onezero);
-		BumbleMatrix zerooneAnswer = net.predict(zeroone);
-		BumbleMatrix zerozeroAnswer = net.predict(zerozero);
+		BumbleMatrix oneoneAnswer = net.calculate(oneone);
+		BumbleMatrix onezeroAnswer = net.calculate(onezero);
+		BumbleMatrix zerooneAnswer = net.calculate(zeroone);
+		BumbleMatrix zerozeroAnswer = net.calculate(zerozero);
 		
 		assertThat(oneoneAnswer.getEntry(0, 0), is(lessThan(0.1)));
 		assertThat(onezeroAnswer.getEntry(0, 0), is(greaterThan(0.9)));
@@ -98,10 +99,10 @@ public class LearningIntegrationTest {
 		BumbleMatrix zerozero = factory.createMatrix(new double[][]{{0,0}});
 		
 		// here are our answers
-		BumbleMatrix oneoneAnswer = net.predict(oneone);
-		BumbleMatrix onezeroAnswer = net.predict(onezero);
-		BumbleMatrix zerooneAnswer = net.predict(zeroone);
-		BumbleMatrix zerozeroAnswer = net.predict(zerozero);
+		BumbleMatrix oneoneAnswer = net.calculate(oneone);
+		BumbleMatrix onezeroAnswer = net.calculate(onezero);
+		BumbleMatrix zerooneAnswer = net.calculate(zeroone);
+		BumbleMatrix zerozeroAnswer = net.calculate(zerozero);
 		
 		System.out.println(oneone.getEntry(0, 0) + ":" + oneone.getEntry(0, 1) + " -> " + oneoneAnswer.getEntry(0, 0));
 		System.out.println(onezero.getEntry(0, 0) + ":" + onezero.getEntry(0, 1) + " -> " + onezeroAnswer.getEntry(0, 0));

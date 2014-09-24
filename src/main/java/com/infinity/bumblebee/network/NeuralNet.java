@@ -1,4 +1,4 @@
-package com.infinity.bumblebee.training;
+package com.infinity.bumblebee.network;
 
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +17,7 @@ public class NeuralNet {
 		this.thetas = thetas;
 	}
 
-	public BumbleMatrix predict(BumbleMatrix input) {
+	public BumbleMatrix calculate(BumbleMatrix input) {
 		BumbleMatrixUtils bmu = new BumbleMatrixUtils();
 
 		BumbleMatrix a = bmu.onesColumnAdded(input);
@@ -38,5 +38,22 @@ public class NeuralNet {
 		a = a.transpose();
 		
 		return a;
+	}
+
+	public Prediction predict(BumbleMatrix input) {
+		BumbleMatrix calculated = calculate(input);
+		
+		int winner = Integer.MIN_VALUE;
+		double score = Integer.MIN_VALUE;
+		
+		for (int i = 0; i < calculated.getColumnDimension(); i++) {
+			double tmpScore = calculated.getEntry(0, i);
+			if (tmpScore > score) {
+				score = tmpScore;
+				winner = i;
+			}
+		}
+		
+		return new Prediction(winner, score);
 	}
 }

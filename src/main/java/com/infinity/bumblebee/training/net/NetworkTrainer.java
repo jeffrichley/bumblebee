@@ -1,16 +1,14 @@
 package com.infinity.bumblebee.training.net;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
-import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.data.MatrixTuple;
 import com.infinity.bumblebee.math.CostFunction;
 import com.infinity.bumblebee.math.DoubleVector;
 import com.infinity.bumblebee.math.Fmincg;
 import com.infinity.bumblebee.math.IterationCompletionListener;
-import com.infinity.bumblebee.training.NeuralNet;
+import com.infinity.bumblebee.network.NeuralNet;
 import com.infinity.bumblebee.training.NeuralNetTrainer;
 import com.infinity.bumblebee.training.NeuralNetTrainerCostFunction;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
@@ -62,7 +60,7 @@ public class NetworkTrainer {
 				}
 			});
 		}
-		DoubleVector minimized = min.minimize(costFunction, thetas, 1000, verbose);
+		DoubleVector minimized = min.minimize(costFunction, thetas, maxTrainingIterations, verbose);
 		
 		List<BumbleMatrix> ts = bmu.reshape(mb.convert(minimized), thetaSizes);
 		NeuralNet net = new NeuralNet(ts);
