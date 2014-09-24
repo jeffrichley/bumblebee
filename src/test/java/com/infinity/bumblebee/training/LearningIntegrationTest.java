@@ -30,7 +30,7 @@ public class LearningIntegrationTest {
 
 	@Test
 	@Ignore
-	// TODO: for some reason large scale problems work like recognizing handwritten digits, but XOR does work
+	// TODO: for some reason large scale problems work like recognizing handwritten digits, but XOR does not work
 	public void test() {
 		// we need to be able to minimize the thetas
 		Fmincg min = new Fmincg();
