@@ -1,5 +1,10 @@
 package com.infinity.bumblebee.training.net;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.infinity.bumblebee.math.DoubleVector;
+import com.infinity.bumblebee.math.IterationCompletionListener;
 import com.infinity.bumblebee.network.NeuralNet;
 
 public class NetworkDSL {
@@ -25,7 +30,9 @@ public class NetworkDSL {
 		return new NetworkDSLTrainer();
 	}
 	
-	class NetworkDSLTrainer {
+	public class NetworkDSLTrainer {
+		
+		private List<TrainingListener> listeners = new ArrayList<TrainingListener>();
 		
 		private NetworkDSLTrainer() {
 			// private so we can't be instatiated from somewhere else
@@ -44,6 +51,11 @@ public class NetworkDSL {
 			configuration.setLambda(learningRate);
 			return this;
 		}
+		
+		public NetworkDSLTrainer withListener(TrainingListener listener) {
+			listeners.add(listener);
+			return this;
+		}
 
 		public NeuralNet train() {
 			return train(false);
@@ -51,6 +63,14 @@ public class NetworkDSL {
 		
 		public NeuralNet train(boolean verbose) {
 			NetworkTrainer trainer = new NetworkTrainer(configuration);
+			for (final TrainingListener listener : listeners) {
+				trainer.addListener(new IterationCompletionListener() {
+					@Override
+					public void onIterationFinished(int iteration, double cost, DoubleVector currentWeights) {
+						listener.onIterationFinished(iteration, cost, currentWeights);
+					}
+				});
+			}
 			return trainer.train(verbose);
 		}
 		

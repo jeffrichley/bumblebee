@@ -1,5 +1,6 @@
 package com.infinity.bumblebee.training.net;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
@@ -21,9 +22,15 @@ public class NetworkTrainer {
 	private final NeuralNetTrainer trainer;
 	private final double lambda;
 	private final int maxTrainingIterations;
+	private final List<IterationCompletionListener> listeners = new ArrayList<>();
 
 	public NetworkTrainer(NetworkTrainerConfiguration config) {
+		System.out.println("loading data");
+		
 		MatrixTuple tuple = new TrainingDataLoader().loadData(config);
+		
+		System.out.println("loaded data");
+		
 		this.inputData = tuple.getOne();
 		this.outputData = tuple.getTwo();
 		this.lambda = config.getLambda();
@@ -32,6 +39,9 @@ public class NetworkTrainer {
 	}
 	
 	public NeuralNet train(boolean verbose) {
+		
+		System.out.println("Training");
+		
 		MathBridge mb = new MathBridge();
 		BumbleMatrixUtils bmu = new BumbleMatrixUtils();
 		
@@ -60,6 +70,9 @@ public class NetworkTrainer {
 				}
 			});
 		}
+		for (IterationCompletionListener listener : listeners) {
+			min.addIterationCompletionCallback(listener);
+		}
 		DoubleVector minimized = min.minimize(costFunction, thetas, maxTrainingIterations, verbose);
 		
 		List<BumbleMatrix> ts = bmu.reshape(mb.convert(minimized), thetaSizes);
@@ -86,6 +99,10 @@ public class NetworkTrainer {
 
 	public int getMaxTrainingIterations() {
 		return maxTrainingIterations;
+	}
+	
+	public void addListener(IterationCompletionListener listener) {
+		listeners.add(listener);
 	}
 
 }
