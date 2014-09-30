@@ -56,4 +56,8 @@ public class NeuralNet {
 		
 		return new Prediction(winner, score);
 	}
+	
+	public List<BumbleMatrix> getThetas() {
+		return thetas;
+	}
 }
