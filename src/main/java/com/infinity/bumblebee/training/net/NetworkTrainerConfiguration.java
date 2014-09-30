@@ -1,5 +1,6 @@
 package com.infinity.bumblebee.training.net;
 
+import java.io.File;
 import java.util.Arrays;
 
 public class NetworkTrainerConfiguration {
@@ -10,6 +11,8 @@ public class NetworkTrainerConfiguration {
 	private int[] layers;
 	private double lambda;
 	private int maxTrainingIterations;
+	private File progressSaveDirectory;
+	private File completeSaveDirectory;
 	
 	public void setTrainingData(String testDataFileName, int maxTrainingIterations, double lambda, int... layers) {
 		this.testDataFileName = testDataFileName;
@@ -67,4 +70,21 @@ public class NetworkTrainerConfiguration {
 	void setMaxTrainingIterations(int maxTrainingIterations) {
 		this.maxTrainingIterations = maxTrainingIterations;
 	}
+
+	public File getProgressSaveDirectory() {
+		return progressSaveDirectory;
+	}
+
+	void setProgressSaveDirectory(File progressSaveDirectory) {
+		this.progressSaveDirectory = progressSaveDirectory;
+	}
+
+	public File getCompleteSaveDirectory() {
+		return completeSaveDirectory;
+	}
+
+	void setCompleteSaveDirectory(File completeSaveDirectory) {
+		this.completeSaveDirectory = completeSaveDirectory;
+	}
+
 }

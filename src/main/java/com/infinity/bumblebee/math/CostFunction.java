@@ -1,5 +1,7 @@
 package com.infinity.bumblebee.math;
 
+import com.infinity.bumblebee.network.NeuralNet;
+
 /**
  * Cost function interface to be implemented when using with a optimizer like
  * conjugate gradient for example.
@@ -18,5 +20,11 @@ public interface CostFunction {
 	 *         of the input.
 	 */
 	CostGradientTuple evaluateCost(DoubleVector input);
+
+	/**
+	 * Get the current network as the training as set it
+	 * @return The current network as the training as set it
+	 */
+	NeuralNet getCurrentNetwork();
 
 }

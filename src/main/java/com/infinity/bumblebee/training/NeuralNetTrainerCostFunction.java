@@ -8,6 +8,7 @@ import com.infinity.bumblebee.data.TrainingTuple;
 import com.infinity.bumblebee.math.CostFunction;
 import com.infinity.bumblebee.math.CostGradientTuple;
 import com.infinity.bumblebee.math.DoubleVector;
+import com.infinity.bumblebee.network.NeuralNet;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 import com.infinity.bumblebee.util.MathBridge;
 
@@ -20,6 +21,7 @@ public class NeuralNetTrainerCostFunction implements CostFunction {
 	private final double lambda;
 	private List<BumbleMatrix> thetas;
 	private final int numLabels;
+	private DoubleVector lastInput;
 
 	public NeuralNetTrainerCostFunction(BumbleMatrix x, BumbleMatrix y, double lambda, int numLabels, List<BumbleMatrix> thetas) {
 		this.x = x;
@@ -31,10 +33,22 @@ public class NeuralNetTrainerCostFunction implements CostFunction {
 
 	@Override
 	public CostGradientTuple evaluateCost(DoubleVector input) {
-//		System.out.println("evaluate");
+		this.lastInput = input;
 		
 		NeuralNetTrainer trainer = new NeuralNetTrainer(thetas);
+		List<BumbleMatrix> thetas = getThetas(input, trainer);
+		trainer.setThetas(thetas);
 		
+		TrainingTuple training = trainer.calculateCost(x, y, numLabels, lambda);
+		
+		BumbleMatrix unroll = bmu.unroll(training.getGradients());
+		DoubleVector gradient = mathBridge.convert(unroll);
+		CostGradientTuple answer = new CostGradientTuple(training.getCost(), gradient );
+		
+		return answer;
+	}
+
+	private List<BumbleMatrix> getThetas(DoubleVector input, NeuralNetTrainer trainer) {
 		int numberOfThetas = trainer.getNumberOfThetas();
 		int[] sizes = new int[numberOfThetas*2];
 		for (int i = 0; i < numberOfThetas; i++) {
@@ -45,16 +59,14 @@ public class NeuralNetTrainerCostFunction implements CostFunction {
 		
 		BumbleMatrix original = mathBridge.convert(input);
 		List<BumbleMatrix> thetas = bmu.reshape(original, sizes);
-		
-		trainer.setThetas(thetas);
-		
-		TrainingTuple training = trainer.calculateCost(x, y, numLabels, lambda);
-		
-		BumbleMatrix unroll = bmu.unroll(training.getGradients());
-		DoubleVector gradient = mathBridge.convert(unroll);
-		CostGradientTuple answer = new CostGradientTuple(training.getCost(), gradient );
-		
-		return answer;
+		return thetas;
+	}
+
+	@Override
+	public NeuralNet getCurrentNetwork() {
+		NeuralNetTrainer trainer = new NeuralNetTrainer(thetas);
+		List<BumbleMatrix> thetas = getThetas(lastInput, trainer);
+		return new NeuralNet(thetas);
 	}
 
 }

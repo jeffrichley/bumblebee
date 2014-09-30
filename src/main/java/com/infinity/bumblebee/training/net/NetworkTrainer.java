@@ -23,13 +23,10 @@ public class NetworkTrainer {
 	private final double lambda;
 	private final int maxTrainingIterations;
 	private final List<IterationCompletionListener> listeners = new ArrayList<>();
+	private CostFunction costFunction;
 
 	public NetworkTrainer(NetworkTrainerConfiguration config) {
-		System.out.println("loading data");
-		
 		MatrixTuple tuple = new TrainingDataLoader().loadData(config);
-		
-		System.out.println("loaded data");
 		
 		this.inputData = tuple.getOne();
 		this.outputData = tuple.getTwo();
@@ -57,7 +54,7 @@ public class NetworkTrainer {
 		
 		// unroll the thetas
 		DoubleVector thetas = mb.convert(bmu.unroll(thetaArray));		
-		CostFunction costFunction = new NeuralNetTrainerCostFunction(inputData, outputData, lambda, 
+		costFunction = new NeuralNetTrainerCostFunction(inputData, outputData, lambda, 
 																	 outputData.getColumnDimension(), 
 																	 thetaList);
 		
@@ -103,6 +100,10 @@ public class NetworkTrainer {
 	
 	public void addListener(IterationCompletionListener listener) {
 		listeners.add(listener);
+	}
+
+	public NeuralNet getCurrentNetwork() {
+		return costFunction.getCurrentNetwork();
 	}
 
 }

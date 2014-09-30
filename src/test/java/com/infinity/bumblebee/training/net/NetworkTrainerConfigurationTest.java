@@ -64,5 +64,41 @@ public class NetworkTrainerConfigurationTest {
 		assertThat(network.predict(oneInput).getAnswer(), is(equalTo(1)));
 		assertThat(network.predict(twoInput).getAnswer(), is(equalTo(2)));
 	}
+	
+	@Test
+	public void ensureCanSaveProgress() {
+		String sep = System.getProperty("file.separator");
+		String saveDir = System.getProperty("user.home") + sep+"tmp"+sep+"bumble"+sep+"save";
+		NetworkDSLTrainer trainingData = usingTrainingData("./test-data/iris.csv")
+							 				.havingLayers(4, 4, 3)
+							 				.savingProgress(saveDir);
+		
+		NetworkTrainerConfiguration dslConfig = trainingData.getConfiguration();
+		
+		assertThat(dslConfig.getProgressSaveDirectory().getAbsolutePath(), is(equalTo(saveDir)));
+	}
+	
+	@Test
+	public void ensureCanSaveAfterTraining() {
+		String sep = System.getProperty("file.separator");
+		String saveDir = System.getProperty("user.home") + sep+"tmp"+sep+"bumble"+sep+"complete";
+		NetworkDSLTrainer trainingData = usingTrainingData("./test-data/iris.csv")
+							 				.havingLayers(4, 4, 3)
+							 				.savingWhenComplete(saveDir);
+		
+		NetworkTrainerConfiguration dslConfig = trainingData.getConfiguration();
+		
+		assertThat(dslConfig.getCompleteSaveDirectory().getAbsolutePath(), is(equalTo(saveDir)));
+	}
+	
+	public static void main(String[] args) {
+		String sep = System.getProperty("file.separator");
+		String saveDir = System.getProperty("user.home") + sep+"tmp"+sep+"bumble"+sep+"complete";
+		NeuralNet network = usingTrainingData("./test-data/iris.csv")
+							 				.havingLayers(4, 4, 3)
+							 				.savingProgress(saveDir)
+							 				.savingWhenComplete(saveDir)
+							 				.train(true);
+	}
 
 }
