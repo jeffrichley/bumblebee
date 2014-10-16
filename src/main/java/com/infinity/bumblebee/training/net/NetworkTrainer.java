@@ -17,27 +17,37 @@ import com.infinity.bumblebee.util.MathBridge;
 
 public class NetworkTrainer {
 
-	private final BumbleMatrix inputData;
-	private final BumbleMatrix outputData;
 	private final NeuralNetTrainer trainer;
 	private final double lambda;
 	private final int maxTrainingIterations;
 	private final List<IterationCompletionListener> listeners = new ArrayList<>();
+	private final NetworkTrainerConfiguration config;
+
+	private BumbleMatrix inputData;
+	private BumbleMatrix outputData;
 	private CostFunction costFunction;
 
 	public NetworkTrainer(NetworkTrainerConfiguration config) {
-		MatrixTuple tuple = new TrainingDataLoader().loadData(config);
-		
-		this.inputData = tuple.getOne();
-		this.outputData = tuple.getTwo();
+		this.config = config;
 		this.lambda = config.getLambda();
 		this.trainer = new NeuralNetTrainer(config.getLayers());
 		this.maxTrainingIterations = config.getMaxTrainingIterations();
 	}
 	
 	public NeuralNet train(boolean verbose) {
+		long start = System.currentTimeMillis();
+		if (verbose) {
+			System.out.print("Loading data...");
+		}
+		MatrixTuple tuple = new TrainingDataLoader().loadData(config);
+		inputData = tuple.getOne();
+		outputData = tuple.getTwo();
 		
-		System.out.println("Training");
+		if (verbose) {
+			long end = System.currentTimeMillis();
+			System.out.println("completed in " + ((end - start) / 1000) + " seconds with " + inputData.getData().length + " training samples");
+			System.out.println("Training");
+		}
 		
 		MathBridge mb = new MathBridge();
 		BumbleMatrixUtils bmu = new BumbleMatrixUtils();
@@ -61,9 +71,17 @@ public class NetworkTrainer {
 		Fmincg min = new Fmincg();
 		if (verbose) {
 			min.addIterationCompletionCallback(new IterationCompletionListener() {
+				
+				private long iterationStarted = System.currentTimeMillis();
+				
 				@Override
 				public void onIterationFinished(int iteration, double cost, DoubleVector currentWeights) {
-					System.out.println("Iteration #" + iteration + ": cost = " + cost);
+					long iterationEnded = System.currentTimeMillis();
+					
+					long time = (iterationEnded - iterationStarted) / 1000;
+					System.out.println("Iteration #" + iteration + " cost = " + cost + " time in seconds: " + time);
+					
+					iterationStarted = iterationEnded;
 				}
 			});
 		}

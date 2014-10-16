@@ -1,3 +1,4 @@
+package com.infinity.bumblebee.training;
 import static com.infinity.bumblebee.training.net.NetworkDSL.usingTrainingData;
 
 import com.infinity.bumblebee.math.DoubleVector;
