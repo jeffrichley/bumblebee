@@ -6,10 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.infinity.bumblebee.data.BumbleMatrix;
+import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.exceptions.BumbleException;
 import com.infinity.bumblebee.math.DoubleVector;
 import com.infinity.bumblebee.math.IterationCompletionListener;
 import com.infinity.bumblebee.network.NeuralNet;
+import com.infinity.bumblebee.training.data.TrainingProgress;
 import com.infinity.bumblebee.util.BumbleMatrixMarshaller;
 
 public class NetworkDSL {
@@ -81,6 +85,11 @@ public class NetworkDSL {
 			configuration.setCompleteSaveDirectory(saveDir);
 			return this;
 		}
+		
+		public NetworkDSLTrainer printingProgressReport(String progressReportFileName) {
+			configuration.setProgressReportFileName(progressReportFileName);
+			return this;
+		}
 
 		public NeuralNet train() {
 			return train(false);
@@ -109,7 +118,7 @@ public class NetworkDSL {
 						if (cost < lowestCost) {
 							lowestCost = cost;
 							try {
-								File saveFileName = new File(configuration.getProgressSaveDirectory().getAbsolutePath() + System.getProperty("file.separator") + "trained-" + cost + ".network");
+								File saveFileName = new File(configuration.getProgressSaveDirectory().getAbsolutePath() + System.getProperty("file.separator") + "trained-" + cost + ".bnet");
 								marshaller.marshal(trainer.getCurrentNetwork(), new FileWriter(saveFileName));
 							} catch (IOException e) {
 								throw new BumbleException("Unable to save the network", e);
@@ -119,7 +128,69 @@ public class NetworkDSL {
 				});
 			}
 			
-			NeuralNet network = trainer.train(verbose);
+			// if we are wanting to pring out a progress report
+			if (configuration.getProgressReportFileName() != null) {
+				trainer.addListener(new IterationCompletionListener() {
+					
+					private final List<TrainingProgress> progressHistory = new ArrayList<>();
+					private final Gson gson = new Gson();
+					
+					@Override
+					public void onIterationFinished(int iteration, double cost, DoubleVector currentWeights) {
+						TrainingProgress progress = new TrainingProgress(iteration, cost);
+						progressHistory.add(progress);
+						String json = gson.toJson(progressHistory);
+						String progressReportFileName = configuration.getProgressReportFileName();
+//						progressReportFileName.replace(".html", ".json");
+						String dataFile = progressReportFileName.substring(0, progressReportFileName.lastIndexOf(System.getProperty("file.separator")) + 1) + "progress.json";
+						try (FileWriter out = new FileWriter(dataFile)) {
+							out.write(json);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+
+			// every once in a while we need to check how the error rate is
+			trainer.addListener(new IterationCompletionListener() {
+				
+				private final BumbleMatrixFactory factory = new BumbleMatrixFactory();
+				
+				@Override
+				public void onIterationFinished(int iteration, double cost, DoubleVector currentWeights) {
+					if (iteration != 0 && iteration % configuration.getTestingEveryNumberOfIterations() == 0) {
+						NeuralNet net = trainer.getCurrentNetwork();
+						
+						BumbleMatrix input = trainer.getTestingData();
+						BumbleMatrix output = trainer.getTestingOutputData();
+						
+						int answerCorrect = 0;
+						int aswersAttempted = 0;
+						
+						for (int row = 0; row < input.getRowDimension(); row++) {
+							double[] inputArray = input.getRow(row);
+							BumbleMatrix oneInput = factory.createMatrix(new double[][]{inputArray});
+							
+							//TODO: need to implement for multiple outputs also
+							BumbleMatrix answer = net.calculate(oneInput);
+							if (answer.getEntry(0, 0) >= .5 && output.getEntry(row, 0) > 0.99) {
+								answerCorrect++;
+							} else if (answer.getEntry(0, 0) < .5 && output.getEntry(row, 0) < 0.01) {
+								answerCorrect++;
+							}
+							
+							aswersAttempted++;
+						}
+						
+						double percentageCorrect = ((double) answerCorrect / (double) aswersAttempted) * 100;
+						System.out.println("Percentage correct for iteration " + iteration + ": " + percentageCorrect);
+					}
+				}
+			});
+			
+			NeuralNet network = trainer.train(verbose, configuration.getPercentageForTraining(), 
+													   configuration.getPercentabgeForTesting());
 			
 			if (configuration.getCompleteSaveDirectory() != null) {
 				BumbleMatrixMarshaller marshaller = new BumbleMatrixMarshaller();
@@ -133,6 +204,21 @@ public class NetworkDSL {
 			
 			return network;
 		}
-		
+
+		public NetworkDSLTrainer withPercentageForTraining(double percentage) {
+			configuration.setPercentageForTraining(percentage);
+			return this;
+		}
+
+		public NetworkDSLTrainer withPercentageForTesting(double percentage) {
+			configuration.setPercentabgeForTesting(percentage);
+			return this;
+		}
+
+		public NetworkDSLTrainer testingEveryNumberOfIterations(int iterations) {
+			configuration.setTestingEveryNumberOfIterations(iterations);
+			return this;
+		}
+
 	}
 }
