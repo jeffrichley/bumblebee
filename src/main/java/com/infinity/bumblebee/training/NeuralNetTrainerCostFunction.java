@@ -14,21 +14,23 @@ import com.infinity.bumblebee.util.MathBridge;
 
 public class NeuralNetTrainerCostFunction implements CostFunction {
 
-	private final BumbleMatrix x;
-	private final BumbleMatrix y;
+//	private final BumbleMatrix x;
+//	private final BumbleMatrix y;
 	private final BumbleMatrixUtils bmu = new BumbleMatrixUtils();
 	private final MathBridge mathBridge = new MathBridge();
 	private final double lambda;
 	private List<BumbleMatrix> thetas;
 	private final int numLabels;
 	private DoubleVector lastInput;
+	private final TrainingDataProvider trainingDataProvider;
 
-	public NeuralNetTrainerCostFunction(BumbleMatrix x, BumbleMatrix y, double lambda, int numLabels, List<BumbleMatrix> thetas) {
-		this.x = x;
-		this.y = y;
+	public NeuralNetTrainerCostFunction(/*BumbleMatrix x, BumbleMatrix y,*/ double lambda, int numLabels, List<BumbleMatrix> thetas, TrainingDataProvider trainingDataProvider) {
+//		this.x = x;
+//		this.y = y;
 		this.lambda = lambda;
 		this.thetas = thetas;
 		this.numLabels = numLabels;
+		this.trainingDataProvider = trainingDataProvider;
 	}
 
 	@Override
@@ -39,11 +41,14 @@ public class NeuralNetTrainerCostFunction implements CostFunction {
 		List<BumbleMatrix> thetas = getThetas(input, trainer);
 		trainer.setThetas(thetas);
 		
-		TrainingTuple training = trainer.calculateCost(x, y, numLabels, lambda);
+		BumbleMatrix iterationX = trainingDataProvider.getIterationX();
+		BumbleMatrix iterationY = trainingDataProvider.getIterationY();
+		TrainingTuple training = trainer.calculateCost(iterationX, iterationY, numLabels, lambda);
+		trainingDataProvider.incrementIteration();
 		
 		BumbleMatrix unroll = bmu.unroll(training.getGradients());
 		DoubleVector gradient = mathBridge.convert(unroll);
-		CostGradientTuple answer = new CostGradientTuple(training.getCost(), gradient );
+		CostGradientTuple answer = new CostGradientTuple(training.getCost(), gradient);
 		
 		return answer;
 	}

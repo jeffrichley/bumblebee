@@ -1,5 +1,7 @@
 package com.infinity.bumblebee.training.net;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,14 +9,19 @@ import java.util.List;
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.data.MatrixTuple;
+import com.infinity.bumblebee.exceptions.BumbleException;
 import com.infinity.bumblebee.math.CostFunction;
 import com.infinity.bumblebee.math.DoubleVector;
 import com.infinity.bumblebee.math.Fmincg;
 import com.infinity.bumblebee.math.IterationCompletionListener;
 import com.infinity.bumblebee.network.NeuralNet;
+import com.infinity.bumblebee.training.GradientDecentTrainingDataProvider;
 import com.infinity.bumblebee.training.NeuralNetTrainer;
 import com.infinity.bumblebee.training.NeuralNetTrainerCostFunction;
+import com.infinity.bumblebee.training.StocasticGradientDecentTrainingDataProvider;
+import com.infinity.bumblebee.training.TrainingDataProvider;
 import com.infinity.bumblebee.training.data.TrainingEntry;
+import com.infinity.bumblebee.util.BumbleMatrixUnmarshaller;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 import com.infinity.bumblebee.util.MathBridge;
 
@@ -35,7 +42,18 @@ public class NetworkTrainer {
 	public NetworkTrainer(NetworkTrainerConfiguration config) {
 		this.config = config;
 		this.lambda = config.getLambda();
-		this.trainer = new NeuralNetTrainer(config.getLayers());
+		if (config.getPreviousTrainingFile() == null) {
+			this.trainer = new NeuralNetTrainer(config.getLayers());
+		} else {
+			BumbleMatrixUnmarshaller unmarshaller = new BumbleMatrixUnmarshaller();
+			try {
+				FileReader in = new FileReader(config.getPreviousTrainingFile());
+				NeuralNet network = unmarshaller.unmarshal(in);
+				this.trainer = new NeuralNetTrainer(network.getThetas());
+			} catch (FileNotFoundException e) {
+				throw new BumbleException("Unable to read network file: " + config.getPreviousTrainingFile(), e);
+			}
+		}
 		this.maxTrainingIterations = config.getMaxTrainingIterations();
 	}
 	
@@ -70,11 +88,26 @@ public class NetworkTrainer {
 			thetaSizes[i*2+1] = theta.getColumnDimension();
 		}
 		
+		TrainingDataProvider trainingDataProvider = null;
+		switch (config.getTrainingDataProviderType()) {
+		case GRADIENT_DECENT:
+			trainingDataProvider = new GradientDecentTrainingDataProvider(trainingData, trainingOutputData);
+			break;
+			
+		case STOCASTIC_GRADIENT_DECENT:
+			trainingDataProvider = new StocasticGradientDecentTrainingDataProvider(trainingData, trainingOutputData);
+			break;
+
+		default:
+			break;
+		}
+		
 		// unroll the thetas
 		DoubleVector thetas = mb.convert(bmu.unroll(thetaArray));		
-		costFunction = new NeuralNetTrainerCostFunction(trainingData, trainingOutputData, lambda, 
+		costFunction = new NeuralNetTrainerCostFunction(/*trainingData, trainingOutputData,*/ lambda, 
 																	 trainingOutputData.getColumnDimension(), 
-																	 thetaList);
+																	 thetaList,
+																	 trainingDataProvider);
 		
 		Fmincg min = new Fmincg();
 		if (verbose) {

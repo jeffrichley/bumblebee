@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.network.NeuralNet;
+import com.infinity.bumblebee.training.GradientDecentTrainingDataProvider;
 import com.infinity.bumblebee.training.NeuralNetTrainer;
 import com.infinity.bumblebee.training.NeuralNetTrainerCostFunction;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
@@ -53,7 +54,7 @@ public class FmincgTest {
 		thetaList.add(theta2);
 		
 //		NeuralNetTrainer nnt = new NeuralNetTrainer(thetaList);
-		costFunction = new NeuralNetTrainerCostFunction(X, y, 1, 10, thetaList);
+		costFunction = new NeuralNetTrainerCostFunction(/*X, y,*/ 1, 10, thetaList, new GradientDecentTrainingDataProvider(X, theta2));
 		
 		MathBridge mb = new MathBridge();
 		

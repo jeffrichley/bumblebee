@@ -14,6 +14,7 @@ import com.infinity.bumblebee.math.DoubleVector;
 import com.infinity.bumblebee.math.IterationCompletionListener;
 import com.infinity.bumblebee.network.NeuralNet;
 import com.infinity.bumblebee.training.data.TrainingProgress;
+import com.infinity.bumblebee.training.net.NetworkTrainerConfiguration.TrainingDataProviderType;
 import com.infinity.bumblebee.util.BumbleMatrixMarshaller;
 
 public class NetworkDSL {
@@ -29,6 +30,11 @@ public class NetworkDSL {
 		NetworkDSL dsl = new NetworkDSL();
 		dsl.configuration.setTestDataFileName(fileName);
 		return dsl;
+	}
+	
+	public NetworkDSL startingWithPreviousTraining(String fileName) {
+		configuration.setPreviousTrainingFile(fileName);
+		return this;
 	}
 
 	public NetworkDSLTrainer havingLayers(int... layers) {
@@ -220,5 +226,11 @@ public class NetworkDSL {
 			return this;
 		}
 
+		public NetworkDSLTrainer withLearningType(TrainingDataProviderType trainingDataProviderType) {
+			configuration.setTrainingDataProviderType(trainingDataProviderType);
+			return this;
+		}
+
 	}
+
 }

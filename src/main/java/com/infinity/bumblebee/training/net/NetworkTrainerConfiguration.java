@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 public class NetworkTrainerConfiguration {
 
+	private String previousTrainingFile;
 	private String testDataFileName;
 	private String progressReportFileName;
 	private int columnsOfInputs;
@@ -17,6 +18,11 @@ public class NetworkTrainerConfiguration {
 	private double percentageForTraining = 1;
 	private double percentabgeForTesting = 0;
 	private int testingEveryNumberOfIterations = Integer.MAX_VALUE;
+	private TrainingDataProviderType trainingDataProviderType = TrainingDataProviderType.GRADIENT_DECENT;
+
+	public enum TrainingDataProviderType {
+		GRADIENT_DECENT, STOCASTIC_GRADIENT_DECENT
+	}
 	
 	public void setTrainingData(String testDataFileName, int maxTrainingIterations, double lambda, int... layers) {
 		this.testDataFileName = testDataFileName;
@@ -122,6 +128,23 @@ public class NetworkTrainerConfiguration {
 	void setTestingEveryNumberOfIterations(
 			int testingEveryNumberOfIterations) {
 		this.testingEveryNumberOfIterations = testingEveryNumberOfIterations;
+	}
+
+	String getPreviousTrainingFile() {
+		return previousTrainingFile;
+	}
+
+	void setPreviousTrainingFile(String previousTrainingFile) {
+		this.previousTrainingFile = previousTrainingFile;
+	}
+
+	public TrainingDataProviderType getTrainingDataProviderType() {
+		return trainingDataProviderType;
+	}
+
+	public void setTrainingDataProviderType(
+			TrainingDataProviderType trainingDataProviderType) {
+		this.trainingDataProviderType = trainingDataProviderType;
 	}
 
 }

@@ -63,7 +63,7 @@ public class LearningIntegrationTest {
 		DoubleVector thetas = mb.convert(bmu.unroll(theta1, theta2));
 		
 		// used to calculate the cost for minimization
-		CostFunction costFunction = new NeuralNetTrainerCostFunction(X, y, 0.3, 1, thetaList);
+		CostFunction costFunction = new NeuralNetTrainerCostFunction(/*X, y,*/ 0.3, 1, thetaList, new GradientDecentTrainingDataProvider(X, y));
 		DoubleVector minimized = min.minimize(costFunction, thetas, 1000, true);
 		
 //		List<BumbleMatrix> ts = bmu.reshape(mb.convert(minimized), new int[]{4, 2, 4, 1});
