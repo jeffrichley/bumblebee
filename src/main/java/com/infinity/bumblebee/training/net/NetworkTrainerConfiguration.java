@@ -17,11 +17,12 @@ public class NetworkTrainerConfiguration {
 	private File completeSaveDirectory;
 	private double percentageForTraining = 1;
 	private double percentabgeForTesting = 0;
+	private double percentageForCrossValidation = 0;
 	private int testingEveryNumberOfIterations = Integer.MAX_VALUE;
 	private TrainingDataProviderType trainingDataProviderType = TrainingDataProviderType.GRADIENT_DECENT;
 
 	public enum TrainingDataProviderType {
-		GRADIENT_DECENT, STOCASTIC_GRADIENT_DECENT
+		GRADIENT_DECENT, STOCHASTIC_GRADIENT_DECENT
 	}
 	
 	public void setTrainingData(String testDataFileName, int maxTrainingIterations, double lambda, int... layers) {
@@ -138,13 +139,21 @@ public class NetworkTrainerConfiguration {
 		this.previousTrainingFile = previousTrainingFile;
 	}
 
-	public TrainingDataProviderType getTrainingDataProviderType() {
+	TrainingDataProviderType getTrainingDataProviderType() {
 		return trainingDataProviderType;
 	}
 
-	public void setTrainingDataProviderType(
+	void setTrainingDataProviderType(
 			TrainingDataProviderType trainingDataProviderType) {
 		this.trainingDataProviderType = trainingDataProviderType;
+	}
+
+	double getPercentageForCrossValidation() {
+		return percentageForCrossValidation;
+	}
+
+	void setPercentageForCrossValidation(double percentageForCrossValidation) {
+		this.percentageForCrossValidation = percentageForCrossValidation;
 	}
 
 }

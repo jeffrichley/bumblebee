@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
-import com.infinity.bumblebee.functions.SigmoidFunction;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 import com.infinity.bumblebee.util.DataReader;
 

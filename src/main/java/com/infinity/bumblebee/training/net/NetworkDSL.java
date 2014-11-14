@@ -161,8 +161,6 @@ public class NetworkDSL {
 			// every once in a while we need to check how the error rate is
 			trainer.addListener(new IterationCompletionListener() {
 				
-				private final BumbleMatrixFactory factory = new BumbleMatrixFactory();
-				
 				@Override
 				public void onIterationFinished(int iteration, double cost, DoubleVector currentWeights) {
 					if (iteration != 0 && iteration % configuration.getTestingEveryNumberOfIterations() == 0) {
@@ -171,32 +169,15 @@ public class NetworkDSL {
 						BumbleMatrix input = trainer.getTestingData();
 						BumbleMatrix output = trainer.getTestingOutputData();
 						
-						int answerCorrect = 0;
-						int aswersAttempted = 0;
+						PredictionEvaluator evaluator = new PredictionEvaluator(input, output, net);
+						double percentageCorrect = evaluator.getPercentageCorrect();
 						
-						for (int row = 0; row < input.getRowDimension(); row++) {
-							double[] inputArray = input.getRow(row);
-							BumbleMatrix oneInput = factory.createMatrix(new double[][]{inputArray});
-							
-							//TODO: need to implement for multiple outputs also
-							BumbleMatrix answer = net.calculate(oneInput);
-							if (answer.getEntry(0, 0) >= .5 && output.getEntry(row, 0) > 0.99) {
-								answerCorrect++;
-							} else if (answer.getEntry(0, 0) < .5 && output.getEntry(row, 0) < 0.01) {
-								answerCorrect++;
-							}
-							
-							aswersAttempted++;
-						}
-						
-						double percentageCorrect = ((double) answerCorrect / (double) aswersAttempted) * 100;
 						System.out.println("Percentage correct for iteration " + iteration + ": " + percentageCorrect);
 					}
 				}
 			});
 			
-			NeuralNet network = trainer.train(verbose, configuration.getPercentageForTraining(), 
-													   configuration.getPercentabgeForTesting());
+			final NeuralNet network = trainer.train(verbose);
 			
 			if (configuration.getCompleteSaveDirectory() != null) {
 				BumbleMatrixMarshaller marshaller = new BumbleMatrixMarshaller();
@@ -206,6 +187,16 @@ public class NetworkDSL {
 				} catch (IOException e) {
 					throw new BumbleException("Unable to save the network", e);
 				}
+			}
+			
+			if (configuration.getPercentageForCrossValidation() > 0) {
+				BumbleMatrix input = trainer.getCrossValidationData();
+				BumbleMatrix output = trainer.getCrossValidationOutputData();
+				
+				PredictionEvaluator evaluator = new PredictionEvaluator(input, output, network);
+				double percentageCorrect = evaluator.getPercentageCorrect();
+				
+				System.out.println("Final percentage correct: " + percentageCorrect);
 			}
 			
 			return network;
@@ -228,6 +219,11 @@ public class NetworkDSL {
 
 		public NetworkDSLTrainer withLearningType(TrainingDataProviderType trainingDataProviderType) {
 			configuration.setTrainingDataProviderType(trainingDataProviderType);
+			return this;
+		}
+
+		public NetworkDSLTrainer withPercentageForCrossValidation(double percentage) {
+			configuration.setPercentageForCrossValidation(percentage);
 			return this;
 		}
 

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
@@ -15,6 +16,7 @@ import com.infinity.bumblebee.functions.MatrixFunction;
 import com.infinity.bumblebee.functions.SigmoidFunction;
 import com.infinity.bumblebee.functions.SigmoidGradientFunction;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
+import com.infinity.bumblebee.util.TimerUtil;
 
 /**
  * Takes a definition of a Neural Network and trains the Theta values to
@@ -24,6 +26,8 @@ import com.infinity.bumblebee.util.BumbleMatrixUtils;
  * @author Jeffrey.Richley
  */
 public class NeuralNetTrainer {
+	
+	private final static Logger LOGGER = Logger.getLogger(NeuralNetTrainer.class.getName()); 
 
 	private List<BumbleMatrix> thetas;
 	private double lambda = 0;
@@ -106,6 +110,9 @@ public class NeuralNetTrainer {
 	 * @return The cost of the network for the given training and label data
 	 */
 	protected TrainingTuple calculateCost(BumbleMatrix X, BumbleMatrix y, int numLabels, double lambda) {
+		System.out.println("starting");
+		LOGGER.info("Starting cost calculation");
+		TimerUtil timer = new TimerUtil();
 		// nnCostFunction.m from mlclass-ex4-005
 
 		// set up helpful variables
@@ -171,6 +178,8 @@ public class NeuralNetTrainer {
 		BumbleMatrix myOnes = factory.createMatrix(a.getRowDimension(), a.getColumnDimension());
 		myOnes.fill(1d);
 		
+		LOGGER.info("Starting forward propigation");
+		
 		double sumForM = 0;
 		for (int i = 0; i < m; i++) {
 			double[] yRowValue = yMatrix.getRow(i);
@@ -202,6 +211,9 @@ public class NeuralNetTrainer {
 			// sumForM = sumForM + sum(myone - mytwo .* mythree);
 			sumForM += bmu.sumAll(bmu.elementWiseSubtract(myOne, bmu.elementWiseMutilply(myTwo, myThree)));
 		}
+		
+		LOGGER.info("Finished forward propogation " + timer.markSeconds());
+		LOGGER.info("Starting regularization");
 
 		double cost = sumForM / m;
 		double regularization = 0;
@@ -215,6 +227,8 @@ public class NeuralNetTrainer {
 			regularization = (lambda / (2 * m)) * regularizatonSummations;
 		}
 
+		LOGGER.info("Finished regularization " + timer.markSeconds());
+		LOGGER.info("Starting back propagation");
 		
 		// back propagation here
 		List<BumbleMatrix> deltas = new ArrayList<>();
@@ -224,6 +238,7 @@ public class NeuralNetTrainer {
 		int alphaIndex = as.size() - 1;
 		
 		// calculate the deltas
+		LOGGER.info("Starting delta calculation");
 		BumbleMatrix previousDelta = bmu.elementWiseSubtract(as.get(alphaIndex), yMatrix);
 		deltas.add(previousDelta);
 		while (thetaIndex > 0) {
@@ -232,10 +247,11 @@ public class NeuralNetTrainer {
 			previousDelta = bmu.elementWiseMutilply(theta.transpose().multiply(previousDelta.transpose()).transpose(), sigGrad);
 			deltas.add(previousDelta);
 		}
-		
+		LOGGER.info("Finished delta calculation " + timer.markSeconds());
 		Collections.reverse(deltas);
 		
 		// calculate gradients
+		LOGGER.info("Starting gradient calculation");
 		List<BumbleMatrix> gradients = new ArrayList<>();
 		for (int index = as.size() - 2; index >= 0; index--) {
 			BumbleMatrix alpha = as.get(index);
@@ -261,13 +277,13 @@ public class NeuralNetTrainer {
 			
 			gradients.add(grad);
 		}
-		
+		LOGGER.info("Finished gradient calculation " + timer.markSeconds());
 
 		Collections.reverse(gradients);
 		GradientRegularizationFunction gradReg = new GradientRegularizationFunction(m, lambda);
-		
+
+		LOGGER.info("Starting to applying gradients");
 		List<BumbleMatrix> finalGradients = new ArrayList<>();
-			
 		for (int i = 0; i < thetas.size(); i++) {
 			BumbleMatrix theta = thetas.get(i);
 			BumbleMatrix gradient = gradients.get(i);
@@ -275,6 +291,8 @@ public class NeuralNetTrainer {
 			BumbleMatrix finalGradient = gradReg.calculate(theta, gradient);
 			finalGradients.add(finalGradient);
 		}
+		LOGGER.info("Completed applying gradients " + timer.markSeconds());
+		LOGGER.info("Finished back propagation");
 		
 		return new TrainingTuple(cost + regularization, finalGradients);
 	}

@@ -70,6 +70,15 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.1</version>
+				<configuration>
+					<mainClass>com.infinity.bumblebee.training.Train</mainClass>
+					<argLine>-Xmx16g</argLine>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

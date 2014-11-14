@@ -3,7 +3,7 @@ package com.infinity.bumblebee.training;
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
 
-public class StocasticGradientDecentTrainingDataProvider implements TrainingDataProvider {
+public class StochasticGradientDecentTrainingDataProvider implements TrainingDataProvider {
 
 	private final BumbleMatrix x;
 	private final BumbleMatrix y;
@@ -11,7 +11,7 @@ public class StocasticGradientDecentTrainingDataProvider implements TrainingData
 	
 	private int iteration = 0;
 
-	public StocasticGradientDecentTrainingDataProvider(BumbleMatrix x, BumbleMatrix y) {
+	public StochasticGradientDecentTrainingDataProvider(BumbleMatrix x, BumbleMatrix y) {
 		this.x = x;
 		this.y = y;
 	}

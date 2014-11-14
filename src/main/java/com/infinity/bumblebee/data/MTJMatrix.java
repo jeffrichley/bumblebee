@@ -49,6 +49,7 @@ public class MTJMatrix implements BumbleMatrix {
 
 	@Override
 	public BumbleMatrix transpose() {
+		// must do this ourselves because for some odd reason the MJT version of transpose requires a matrix to be square
 		DenseMatrix t = new DenseMatrix(matrix.numColumns(), matrix.numRows());
 		for (MatrixEntry e : matrix) {
             t.set(e.column(), e.row(), e.get());
