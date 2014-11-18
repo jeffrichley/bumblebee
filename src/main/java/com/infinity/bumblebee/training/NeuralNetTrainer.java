@@ -111,7 +111,7 @@ public class NeuralNetTrainer {
 	 */
 	protected TrainingTuple calculateCost(BumbleMatrix X, BumbleMatrix y, int numLabels, double lambda) {
 		System.out.println("starting");
-		LOGGER.info("Starting cost calculation");
+		LOGGER.fine("Starting cost calculation");
 		TimerUtil timer = new TimerUtil();
 		// nnCostFunction.m from mlclass-ex4-005
 
@@ -178,7 +178,7 @@ public class NeuralNetTrainer {
 		BumbleMatrix myOnes = factory.createMatrix(a.getRowDimension(), a.getColumnDimension());
 		myOnes.fill(1d);
 		
-		LOGGER.info("Starting forward propigation");
+		LOGGER.fine("Starting forward propigation");
 		
 		double sumForM = 0;
 		for (int i = 0; i < m; i++) {
@@ -212,8 +212,8 @@ public class NeuralNetTrainer {
 			sumForM += bmu.sumAll(bmu.elementWiseSubtract(myOne, bmu.elementWiseMutilply(myTwo, myThree)));
 		}
 		
-		LOGGER.info("Finished forward propogation " + timer.markSeconds());
-		LOGGER.info("Starting regularization");
+		LOGGER.fine("Finished forward propogation " + timer.markSeconds());
+		LOGGER.fine("Starting regularization");
 
 		double cost = sumForM / m;
 		double regularization = 0;
@@ -227,8 +227,8 @@ public class NeuralNetTrainer {
 			regularization = (lambda / (2 * m)) * regularizatonSummations;
 		}
 
-		LOGGER.info("Finished regularization " + timer.markSeconds());
-		LOGGER.info("Starting back propagation");
+		LOGGER.fine("Finished regularization " + timer.markSeconds());
+		LOGGER.fine("Starting back propagation");
 		
 		// back propagation here
 		List<BumbleMatrix> deltas = new ArrayList<>();
@@ -238,7 +238,7 @@ public class NeuralNetTrainer {
 		int alphaIndex = as.size() - 1;
 		
 		// calculate the deltas
-		LOGGER.info("Starting delta calculation");
+		LOGGER.fine("Starting delta calculation");
 		BumbleMatrix previousDelta = bmu.elementWiseSubtract(as.get(alphaIndex), yMatrix);
 		deltas.add(previousDelta);
 		while (thetaIndex > 0) {
@@ -247,11 +247,11 @@ public class NeuralNetTrainer {
 			previousDelta = bmu.elementWiseMutilply(theta.transpose().multiply(previousDelta.transpose()).transpose(), sigGrad);
 			deltas.add(previousDelta);
 		}
-		LOGGER.info("Finished delta calculation " + timer.markSeconds());
+		LOGGER.fine("Finished delta calculation " + timer.markSeconds());
 		Collections.reverse(deltas);
 		
 		// calculate gradients
-		LOGGER.info("Starting gradient calculation");
+		LOGGER.fine("Starting gradient calculation");
 		List<BumbleMatrix> gradients = new ArrayList<>();
 		for (int index = as.size() - 2; index >= 0; index--) {
 			BumbleMatrix alpha = as.get(index);
@@ -277,12 +277,12 @@ public class NeuralNetTrainer {
 			
 			gradients.add(grad);
 		}
-		LOGGER.info("Finished gradient calculation " + timer.markSeconds());
+		LOGGER.fine("Finished gradient calculation " + timer.markSeconds());
 
 		Collections.reverse(gradients);
 		GradientRegularizationFunction gradReg = new GradientRegularizationFunction(m, lambda);
 
-		LOGGER.info("Starting to applying gradients");
+		LOGGER.fine("Starting to applying gradients");
 		List<BumbleMatrix> finalGradients = new ArrayList<>();
 		for (int i = 0; i < thetas.size(); i++) {
 			BumbleMatrix theta = thetas.get(i);
@@ -291,8 +291,8 @@ public class NeuralNetTrainer {
 			BumbleMatrix finalGradient = gradReg.calculate(theta, gradient);
 			finalGradients.add(finalGradient);
 		}
-		LOGGER.info("Completed applying gradients " + timer.markSeconds());
-		LOGGER.info("Finished back propagation");
+		LOGGER.fine("Completed applying gradients " + timer.markSeconds());
+		LOGGER.fine("Finished back propagation");
 		
 		return new TrainingTuple(cost + regularization, finalGradients);
 	}

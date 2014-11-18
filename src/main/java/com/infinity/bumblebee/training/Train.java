@@ -11,10 +11,11 @@ public class Train {
 		/*usingTrainingData("/Users/jeffreyrichley/Documents/workspace/raven/data/crunched-training.csv")*/
 		/*usingTrainingData("/Users/jeffreyrichley/Documents/workspace/raven/data/crunched-training-houses.csv")*/
 		/*usingTrainingData("/Volumes/TANK/lidar/data/hampton/quad-training-samples-house-only.csv")*/
-		usingTrainingData("C:/Users/Jeffrey.RICHLEY/Downloads/quad-training-house-only.csv")
+//		usingTrainingData("C:/Users/Jeffrey.RICHLEY/Downloads/quad-training-house-only.csv")
+		usingTrainingData("C:/Users/Jeffrey.RICHLEY/Downloads/quad-training-house-only-30x30.csv")
 //			.startingWithPreviousTraining("/Volumes/TANK/lidar/training/bumble/houses/trained-804.8695337527753.bnet")
-//			.startingWithPreviousTraining("C:/Users/Jeffrey.RICHLEY/Downloads/progress/trained-803.9358858752888.bnet")
- 				.havingLayers(8100, 4000, 1)
+			.startingWithPreviousTraining("C:/Users/Jeffrey.RICHLEY/Downloads/progress/trained-0.1907606428082836.bnet")
+ 				.havingLayers(900, 600, 1)
 // 				.atMostIterations(2500)
  				.withLearningRate(0.3)
  				.withPercentageForTraining(0.6)
