@@ -177,7 +177,7 @@ public class NeuralNetTrainer {
 		BumbleMatrix myOnes = factory.createMatrix(a.getRowDimension(), a.getColumnDimension());
 		myOnes.fill(1d);
 		
-		LOGGER.fine("Starting forward propigation");
+		LOGGER.fine("Starting forward propagation");
 		
 		double sumForM = 0;
 		for (int i = 0; i < m; i++) {
@@ -211,7 +211,7 @@ public class NeuralNetTrainer {
 			sumForM += bmu.sumAll(bmu.elementWiseSubtract(myOne, bmu.elementWiseMutilply(myTwo, myThree)));
 		}
 		
-		LOGGER.fine("Finished forward propogation " + timer.markSeconds());
+		LOGGER.fine("Finished forward propagation " + timer.markSeconds());
 		LOGGER.fine("Starting regularization");
 
 		double cost = sumForM / m;
