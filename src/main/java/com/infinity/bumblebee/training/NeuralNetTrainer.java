@@ -110,7 +110,6 @@ public class NeuralNetTrainer {
 	 * @return The cost of the network for the given training and label data
 	 */
 	protected TrainingTuple calculateCost(BumbleMatrix X, BumbleMatrix y, int numLabels, double lambda) {
-		System.out.println("starting");
 		LOGGER.fine("Starting cost calculation");
 		TimerUtil timer = new TimerUtil();
 		// nnCostFunction.m from mlclass-ex4-005

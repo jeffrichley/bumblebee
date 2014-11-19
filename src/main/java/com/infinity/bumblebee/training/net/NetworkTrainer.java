@@ -73,7 +73,10 @@ public class NetworkTrainer {
 		
 		if (verbose) {
 			long end = System.currentTimeMillis();
-			System.out.println("completed in " + ((end - start) / 1000) + " seconds with " + trainingData.getData().length + " training samples");
+			System.out.println("completed in " + ((end - start) / 1000) + " seconds");
+			System.out.println(trainingData.getData().length + " training samples");
+			System.out.println(testingData.getData().length + " testing samples");
+			System.out.println(crossValidationData.getData().length + " cross validation samples");
 			System.out.println("Training");
 		}
 		
@@ -154,7 +157,7 @@ public class NetworkTrainer {
 		
 		// shuffle the training set to optimize training efficiency
 		List<TrainingEntry> entries = new ArrayList<>();
-		for (int row = 0; row < numTraining; row++) {
+		for (int row = 0; row < input.getRowDimension(); row++) {
 			TrainingEntry entry = new TrainingEntry(input.getRow(row), out.getRow(row));
 			entries.add(entry);
 		}
@@ -173,25 +176,31 @@ public class NetworkTrainer {
 			}
 		}
 		
-		for (int row = 0; row < numTesting; row++) {
+		for (int row = numTraining; row < numTesting + numTraining; row++) {
 			// set input data
+			TrainingEntry trainingEntry = entries.get(row);
+			int inputRowIndex = 0;
 			for (int column = 0; column < input.getColumnDimension(); column++) {
-				testingData.setEntry(row, column, entries.get(row).getInput()[column]);
+				testingData.setEntry(inputRowIndex++, column, trainingEntry.getInput()[column]);
 			}
 			// set output data
+			int outputRowIndex = 0;
 			for (int column = 0; column < out.getColumnDimension(); column++) {
-				testingOutputData.setEntry(row, column, entries.get(row).getOutput()[column]);
+				testingOutputData.setEntry(outputRowIndex++, column, trainingEntry.getOutput()[column]);
 			}
 		}
 		
-		for (int row = 0; row < numCross; row++) {
+		for (int row = numTraining + numTesting; row < numCross + numTesting + numTraining; row++) {
 			// set input data
+			TrainingEntry trainingEntry = entries.get(row);
+			int inputRowIndex = 0;
 			for (int column = 0; column < input.getColumnDimension(); column++) {
-				crossValidationData.setEntry(row, column, entries.get(row).getInput()[column]);
+				crossValidationData.setEntry(inputRowIndex++, column, trainingEntry.getInput()[column]);
 			}
 			// set output data
+			int outputRowIndex = 0;
 			for (int column = 0; column < out.getColumnDimension(); column++) {
-				crossValidationOutputData.setEntry(row, column, entries.get(row).getOutput()[column]);
+				crossValidationOutputData.setEntry(outputRowIndex++, column, trainingEntry.getOutput()[column]);
 			}
 		}
 	}

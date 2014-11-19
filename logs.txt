@@ -60,3 +60,34 @@ Iteration #53 cost = 0.1928281927130099 time in seconds: 171
 Iteration #54 cost = 0.19200009231475276 time in seconds: 172
 Iteration #55 cost = 0.1907606428082836 time in seconds: 86
 Percentage correct for iteration 55: 92.63984298331698
+Iteration #1 cost = 0.1903886875908782 time in seconds: 358
+Iteration #2 cost = 0.18949492652872305 time in seconds: 175
+Iteration #3 cost = 0.18697125299242207 time in seconds: 175
+Iteration #4 cost = 0.18623487933070557 time in seconds: 175
+Iteration #5 cost = 0.1842497565770085 time in seconds: 177
+Percentage correct for iteration 5: 93.32679097154073
+Iteration #6 cost = 0.183805389299014 time in seconds: 182
+Iteration #7 cost = 0.18279005232297565 time in seconds: 177
+Iteration #8 cost = 0.1827400859948341 time in seconds: 183
+Iteration #9 cost = 0.1822338775976507 time in seconds: 86
+Iteration #10 cost = 0.18168960398502473 time in seconds: 88
+Percentage correct for iteration 10: 93.27772325809617
+Iteration #11 cost = 0.18153669748609683 time in seconds: 183
+Iteration #12 cost = 0.18096137460738035 time in seconds: 181
+Iteration #13 cost = 0.18041711141433606 time in seconds: 91
+Iteration #14 cost = 0.1797780879142589 time in seconds: 91
+Iteration #15 cost = 0.1791235408540144 time in seconds: 90
+Percentage correct for iteration 15: 93.32679097154073
+Iteration #16 cost = 0.17883953585394893 time in seconds: 91
+Iteration #17 cost = 0.17865072485520028 time in seconds: 180
+Iteration #18 cost = 0.17715697640507458 time in seconds: 270
+Iteration #19 cost = 0.17422519372790896 time in seconds: 178
+Iteration #20 cost = 0.17363005991819117 time in seconds: 90
+Percentage correct for iteration 20: 93.47399411187438
+Iteration #21 cost = 0.1693763928768074 time in seconds: 92
+Iteration #22 cost = 0.16733686310066515 time in seconds: 181
+Iteration #23 cost = 0.16728839078342048 time in seconds: 267
+Iteration #24 cost = 0.16403516269775084 time in seconds: 264
+Iteration #25 cost = 0.16321423991569314 time in seconds: 87
+Percentage correct for iteration 25: 94.35721295387634
+Iteration #26 cost = 0.16226125002144362 time in seconds: 175

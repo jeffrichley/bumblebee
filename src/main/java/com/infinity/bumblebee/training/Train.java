@@ -14,7 +14,7 @@ public class Train {
 //		usingTrainingData("C:/Users/Jeffrey.RICHLEY/Downloads/quad-training-house-only.csv")
 		usingTrainingData("C:/Users/Jeffrey.RICHLEY/Downloads/quad-training-house-only-30x30.csv")
 //			.startingWithPreviousTraining("/Volumes/TANK/lidar/training/bumble/houses/trained-804.8695337527753.bnet")
-			.startingWithPreviousTraining("C:/Users/Jeffrey.RICHLEY/Downloads/progress/trained-0.1907606428082836.bnet")
+//			.startingWithPreviousTraining("C:/Users/Jeffrey.RICHLEY/Downloads/progress/trained-0.1907606428082836.bnet")
  				.havingLayers(900, 600, 1)
 // 				.atMostIterations(2500)
  				.withLearningRate(0.3)

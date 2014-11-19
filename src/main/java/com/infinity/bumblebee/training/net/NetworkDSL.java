@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.infinity.bumblebee.data.BumbleMatrix;
-import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.exceptions.BumbleException;
 import com.infinity.bumblebee.math.DoubleVector;
 import com.infinity.bumblebee.math.IterationCompletionListener;
@@ -134,7 +133,7 @@ public class NetworkDSL {
 				});
 			}
 			
-			// if we are wanting to pring out a progress report
+			// if we are wanting to print out a progress report
 			if (configuration.getProgressReportFileName() != null) {
 				trainer.addListener(new IterationCompletionListener() {
 					
@@ -166,13 +165,17 @@ public class NetworkDSL {
 					if (iteration != 0 && iteration % configuration.getTestingEveryNumberOfIterations() == 0) {
 						NeuralNet net = trainer.getCurrentNetwork();
 						
-						BumbleMatrix input = trainer.getTestingData();
-						BumbleMatrix output = trainer.getTestingOutputData();
+						BumbleMatrix testingInput = trainer.getTestingData();
+						BumbleMatrix testingOutput = trainer.getTestingOutputData();
+						PredictionEvaluator testingEvaluator = new PredictionEvaluator(testingInput, testingOutput, net);
+						double testingPercentageCorrect = testingEvaluator.getPercentageCorrect();
 						
-						PredictionEvaluator evaluator = new PredictionEvaluator(input, output, net);
-						double percentageCorrect = evaluator.getPercentageCorrect();
+						BumbleMatrix trainingInput = trainer.getInputData();
+						BumbleMatrix trainingOutput = trainer.getOutputData();
+						PredictionEvaluator trainingEvaluator = new PredictionEvaluator(trainingInput, trainingOutput, net);
+						double trainingPercentageCorrect = trainingEvaluator.getPercentageCorrect();
 						
-						System.out.println("Percentage correct for iteration " + iteration + ": " + percentageCorrect);
+						System.out.println("Percentage correct for iteration (train/test) " + iteration + ": " + trainingPercentageCorrect + " / " + testingPercentageCorrect);
 					}
 				}
 			});
