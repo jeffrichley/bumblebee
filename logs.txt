@@ -60,3 +60,286 @@ Iteration #53 cost = 0.1928281927130099 time in seconds: 171
 Iteration #54 cost = 0.19200009231475276 time in seconds: 172
 Iteration #55 cost = 0.1907606428082836 time in seconds: 86
 Percentage correct for iteration 55: 92.63984298331698
+Iteration #1 cost = 0.15377517076807853 time in seconds: 2502
+Iteration #2 cost = 0.15330235479517187 time in seconds: 1729
+Iteration #3 cost = 0.15192918021538213 time in seconds: 1920
+Iteration #4 cost = 0.15110892397750764 time in seconds: 962
+Iteration #5 cost = 0.1496789546637573 time in seconds: 949
+Percentage correct for iteration 5: 94.55348380765456
+Iteration #6 cost = 0.1489801148212378 time in seconds: 1919
+Iteration #7 cost = 0.14816298275217743 time in seconds: 909
+Iteration #8 cost = 0.14781861829613474 time in seconds: 1737
+Iteration #1 cost = 0.14867865424994936 time in seconds: 554
+starting
+Iteration #2 cost = 0.1482444691367748 time in seconds: 134
+starting
+starting
+Iteration #3 cost = 0.14817458840593445 time in seconds: 253
+starting
+starting
+Iteration #4 cost = 0.1478982664843113 time in seconds: 243
+starting
+Iteration #5 cost = 0.1475953366071466 time in seconds: 122
+Percentage correct for iteration 5: 95.33856722276742
+starting
+Iteration #6 cost = 0.14729168411787597 time in seconds: 124
+starting
+Iteration #7 cost = 0.14702642132478305 time in seconds: 124
+starting
+starting
+Iteration #8 cost = 0.146250016443133 time in seconds: 244
+starting
+starting
+Iteration #9 cost = 0.14404915184312364 time in seconds: 245
+starting
+starting
+Iteration #10 cost = 0.14286307800449566 time in seconds: 265
+Percentage correct for iteration 10: 97.49754661432777
+starting
+Iteration #11 cost = 0.1414037730802892 time in seconds: 135
+starting
+starting
+Iteration #12 cost = 0.14092193666671457 time in seconds: 267
+starting
+Iteration #13 cost = 0.14025059800471554 time in seconds: 134
+starting
+Iteration #14 cost = 0.13968606314930102 time in seconds: 133
+starting
+Iteration #15 cost = 0.13926931139079027 time in seconds: 134
+Percentage correct for iteration 15: 96.66339548577037
+starting
+Iteration #16 cost = 0.13864940603283837 time in seconds: 136
+starting
+Iteration #17 cost = 0.1384762711404765 time in seconds: 134
+starting
+Iteration #18 cost = 0.13813729206323253 time in seconds: 133
+starting
+Iteration #19 cost = 0.13761620326760848 time in seconds: 134
+starting
+starting
+Iteration #20 cost = 0.13742408777607373 time in seconds: 268
+Percentage correct for iteration 20: 96.56526005888125
+starting
+starting
+Iteration #21 cost = 0.13696148674844127 time in seconds: 270
+starting
+starting
+Iteration #22 cost = 0.13671727519111987 time in seconds: 268
+starting
+starting
+Iteration #23 cost = 0.13658619964391186 time in seconds: 267
+starting
+starting
+Iteration #24 cost = 0.13610092054586878 time in seconds: 267
+starting
+Iteration #25 cost = 0.13566615626128278 time in seconds: 129
+Percentage correct for iteration 25: 96.76153091265947
+starting
+Iteration #26 cost = 0.1353872339025186 time in seconds: 124
+starting
+Iteration #27 cost = 0.1350534571375389 time in seconds: 123
+starting
+Iteration #28 cost = 0.13447343649289353 time in seconds: 123
+starting
+Iteration #29 cost = 0.1340811826656591 time in seconds: 122
+starting
+starting
+Iteration #30 cost = 0.13391969501198733 time in seconds: 244
+Percentage correct for iteration 30: 97.00686947988224
+starting
+Iteration #31 cost = 0.13378348576585977 time in seconds: 124
+starting
+starting
+Iteration #32 cost = 0.1337310130712044 time in seconds: 244
+starting
+starting
+Iteration #33 cost = 0.1335709603683667 time in seconds: 243
+starting
+Iteration #34 cost = 0.13340167439882447 time in seconds: 122
+starting
+starting
+Iteration #35 cost = 0.1329970483178981 time in seconds: 244
+Percentage correct for iteration 35: 97.30127576054956
+starting
+Iteration #36 cost = 0.1324801092954369 time in seconds: 124
+starting
+Iteration #37 cost = 0.1321203113631333 time in seconds: 122
+starting
+Iteration #38 cost = 0.13174441552673788 time in seconds: 122
+starting
+starting
+Iteration #39 cost = 0.13059948390886533 time in seconds: 244
+starting
+Iteration #40 cost = 0.12989517732749117 time in seconds: 122
+Percentage correct for iteration 40: 97.84102060843965
+starting
+starting
+Iteration #41 cost = 0.12977355387509235 time in seconds: 246
+starting
+starting
+Iteration #42 cost = 0.1295016969032585 time in seconds: 244
+starting
+Iteration #43 cost = 0.12930496021941845 time in seconds: 123
+starting
+starting
+Iteration #44 cost = 0.12918393014227322 time in seconds: 244
+starting
+starting
+Iteration #45 cost = 0.12892907459760106 time in seconds: 244
+Percentage correct for iteration 45: 97.8900883218842
+starting
+starting
+Iteration #46 cost = 0.1287848157817613 time in seconds: 244
+starting
+Iteration #47 cost = 0.1286527719470739 time in seconds: 121
+starting
+starting
+Iteration #48 cost = 0.12855702526872717 time in seconds: 248
+starting
+starting
+Iteration #49 cost = 0.12823527585849231 time in seconds: 249
+starting
+Iteration #50 cost = 0.12785648386501913 time in seconds: 124
+Percentage correct for iteration 50: 97.64474975466143
+starting
+starting
+Iteration #51 cost = 0.12697504257419187 time in seconds: 249
+starting
+Iteration #52 cost = 0.12601280887103508 time in seconds: 124
+starting
+Iteration #53 cost = 0.1257981393607439 time in seconds: 123
+starting
+Iteration #54 cost = 0.12493155032261771 time in seconds: 123
+starting
+Iteration #55 cost = 0.1243417330008889 time in seconds: 124
+Percentage correct for iteration 55: 98.08635917566242
+starting
+Iteration #56 cost = 0.12375908558507073 time in seconds: 125
+starting
+starting
+Iteration #57 cost = 0.12353966504493075 time in seconds: 247
+starting
+Iteration #58 cost = 0.1233701416801177 time in seconds: 124
+starting
+starting
+Iteration #59 cost = 0.12325720508168819 time in seconds: 248
+starting
+Iteration #60 cost = 0.12310335731488295 time in seconds: 124
+Percentage correct for iteration 60: 98.13542688910697
+starting
+Iteration #61 cost = 0.12301797822873023 time in seconds: 125
+starting
+starting
+Iteration #62 cost = 0.12295062600680312 time in seconds: 247
+starting
+Iteration #63 cost = 0.12288671347089897 time in seconds: 123
+starting
+Iteration #64 cost = 0.12279861807811651 time in seconds: 124
+starting
+starting
+Iteration #65 cost = 0.12276141916553265 time in seconds: 249
+Percentage correct for iteration 65: 98.13542688910697
+starting
+starting
+Iteration #66 cost = 0.12264499521664356 time in seconds: 250
+starting
+starting
+Iteration #67 cost = 0.12215516106432726 time in seconds: 248
+starting
+Iteration #68 cost = 0.12185411352282699 time in seconds: 124
+starting
+starting
+Iteration #69 cost = 0.12173838598674694 time in seconds: 267
+starting
+starting
+Iteration #70 cost = 0.12114623680051995 time in seconds: 267
+Percentage correct for iteration 70: 98.08635917566242
+starting
+starting
+Iteration #71 cost = 0.12107742177868322 time in seconds: 267
+starting
+starting
+Iteration #72 cost = 0.12104513875466888 time in seconds: 266
+starting
+starting
+Iteration #73 cost = 0.12097824485375262 time in seconds: 266
+starting
+starting
+Iteration #74 cost = 0.12072781477841768 time in seconds: 265
+starting
+Iteration #75 cost = 0.12042674395295808 time in seconds: 133
+Percentage correct for iteration 75: 98.13542688910697
+starting
+Iteration #76 cost = 0.12025851436760152 time in seconds: 136
+starting
+starting
+Iteration #77 cost = 0.12018174337640533 time in seconds: 266
+starting
+starting
+Iteration #78 cost = 0.119882031019794 time in seconds: 266
+starting
+starting
+Iteration #79 cost = 0.11979236282757878 time in seconds: 265
+starting
+starting
+Iteration #80 cost = 0.1195732427423414 time in seconds: 266
+Percentage correct for iteration 80: 98.13542688910697
+starting
+starting
+starting
+Iteration #81 cost = 0.1195686910109018 time in seconds: 377
+starting
+starting
+Iteration #82 cost = 0.11940766454608252 time in seconds: 247
+starting
+Iteration #83 cost = 0.11929654448616428 time in seconds: 124
+starting
+starting
+Iteration #84 cost = 0.11926425541677439 time in seconds: 247
+starting
+starting
+starting
+Iteration #85 cost = 0.11897986785417095 time in seconds: 375
+Percentage correct for iteration 85: 98.13542688910697
+starting
+Iteration #86 cost = 0.11870148339487029 time in seconds: 125
+starting
+Iteration #87 cost = 0.1186032397090463 time in seconds: 125
+starting
+starting
+Iteration #88 cost = 0.11788174698178684 time in seconds: 248
+starting
+Iteration #89 cost = 0.11700356737574119 time in seconds: 125
+starting
+starting
+Iteration #90 cost = 0.11671493471845142 time in seconds: 249
+Percentage correct for iteration 90: 98.13542688910697
+starting
+starting
+Iteration #91 cost = 0.11669831465261246 time in seconds: 249
+starting
+starting
+Iteration #92 cost = 0.11634955423457016 time in seconds: 248
+starting
+Iteration #93 cost = 0.11604951534261192 time in seconds: 124
+starting
+Iteration #94 cost = 0.11575160747260498 time in seconds: 124
+starting
+Iteration #95 cost = 0.11557291495606753 time in seconds: 125
+Percentage correct for iteration 95: 98.23356231599607
+starting
+starting
+Iteration #96 cost = 0.11540119002213456 time in seconds: 250
+starting
+Iteration #97 cost = 0.11516820358956709 time in seconds: 125
+starting
+starting
+Iteration #98 cost = 0.11479914414562128 time in seconds: 248
+starting
+starting
+Iteration #99 cost = 0.1145978871612324 time in seconds: 248
+starting
+starting
+Iteration #100 cost = 0.11453705585462569 time in seconds: 248
+Percentage correct for iteration 100: 98.38076545632973
+Final percentage correct: 98.38076545632973
