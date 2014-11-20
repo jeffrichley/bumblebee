@@ -13,6 +13,7 @@ import com.infinity.bumblebee.math.DoubleVector;
 import com.infinity.bumblebee.math.IterationCompletionListener;
 import com.infinity.bumblebee.network.NeuralNet;
 import com.infinity.bumblebee.training.data.TrainingProgress;
+import com.infinity.bumblebee.training.data.TrainingResult;
 import com.infinity.bumblebee.training.net.NetworkTrainerConfiguration.TrainingDataProviderType;
 import com.infinity.bumblebee.util.BumbleMatrixMarshaller;
 
@@ -96,11 +97,11 @@ public class NetworkDSL {
 			return this;
 		}
 
-		public NeuralNet train() {
+		public TrainingResult train() {
 			return train(false);
 		}
 		
-		public NeuralNet train(boolean verbose) {
+		public TrainingResult train(boolean verbose) {
 			final NetworkTrainer trainer = new NetworkTrainer(configuration);
 			for (final TrainingListener listener : listeners) {
 				trainer.addListener(new IterationCompletionListener() {
@@ -182,6 +183,9 @@ public class NetworkDSL {
 			
 			final NeuralNet network = trainer.train(verbose);
 			
+			TrainingResult result = new TrainingResult();
+			result.setNetwork(network);
+			
 			if (configuration.getCompleteSaveDirectory() != null) {
 				BumbleMatrixMarshaller marshaller = new BumbleMatrixMarshaller();
 				File saveFileName = new File(configuration.getCompleteSaveDirectory().getAbsolutePath() + System.getProperty("file.separator") + "trained-final.network");
@@ -195,14 +199,34 @@ public class NetworkDSL {
 			if (configuration.getPercentageForCrossValidation() > 0) {
 				BumbleMatrix input = trainer.getCrossValidationData();
 				BumbleMatrix output = trainer.getCrossValidationOutputData();
-				
 				PredictionEvaluator evaluator = new PredictionEvaluator(input, output, network);
-				double percentageCorrect = evaluator.getPercentageCorrect();
+				result.setCrossValidationPercent(evaluator.getPercentageCorrect());
+				result.setCrossValidationPrecision(evaluator.getPrecision());
+				result.setCrossValidationRecall(evaluator.getRecall());
+				result.setCrossValidationF1(evaluator.getF1());
 				
-				System.out.println("Final percentage correct: " + percentageCorrect);
+				System.out.println("Final percentage correct: " + evaluator.getPercentageCorrect());
 			}
 			
-			return network;
+			if (configuration.getPercentabgeForTesting() > 0) {
+				BumbleMatrix testingInput = trainer.getTestingData();
+				BumbleMatrix testingOutput = trainer.getTestingOutputData();
+				PredictionEvaluator testingEvaluator = new PredictionEvaluator(testingInput, testingOutput, network);
+				result.setTestPercent(testingEvaluator.getPercentageCorrect());
+				result.setTestPrecision(testingEvaluator.getPrecision());
+				result.setTestRecall(testingEvaluator.getRecall());
+				result.setTestF1(testingEvaluator.getF1());
+			}
+			
+			BumbleMatrix trainingInput = trainer.getInputData();
+			BumbleMatrix trainingOutput = trainer.getOutputData();
+			PredictionEvaluator trainingEvaluator = new PredictionEvaluator(trainingInput, trainingOutput, network);
+			result.setTrainingPercent(trainingEvaluator.getPercentageCorrect());
+			result.setTrainingPrecision(trainingEvaluator.getPrecision());
+			result.setTrainingRecall(trainingEvaluator.getRecall());
+			result.setTrainingF1(trainingEvaluator.getF1());
+			
+			return result;
 		}
 
 		public NetworkDSLTrainer withPercentageForTraining(double percentage) {

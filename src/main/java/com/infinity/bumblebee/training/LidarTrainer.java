@@ -2,12 +2,9 @@ package com.infinity.bumblebee.training;
 
 import static com.infinity.bumblebee.training.net.NetworkDSL.usingTrainingData;
 
-import com.infinity.bumblebee.network.NeuralNet;
-
 public class LidarTrainer {
 
 	public static void main(String[] args) {
-		NeuralNet network = 
 				usingTrainingData("/Users/jeffreyrichley/Documents/workspace/raven/data/las_s23_1503_10.2011.fema-normalized.csv")
 //				usingTrainingData("/Users/jeffreyrichley/Documents/workspace/raven/data/las_s23_1503_30.2011.fema-normalized.csv")
 //				usingTrainingData("/Volumes/TANK/lidar/data/hampton/training-files/las_s23_1503_30.2011.fema-normalized.csv")

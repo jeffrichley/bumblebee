@@ -53,7 +53,7 @@ public class NetworkTrainerConfigurationTest {
 				 				.havingLayers(4, 4, 3)
 				 				.atMostIterations(1000)
 				 				.withLearningRate(0.3)
-				 				.train();
+				 				.train().getNetwork();
 		
 		BumbleMatrixFactory factory = new BumbleMatrixFactory();
 		BumbleMatrix zeroInput = factory.createMatrix(new double[][]{{5.1, 3.5, 1.4, 0.2}});
@@ -94,11 +94,11 @@ public class NetworkTrainerConfigurationTest {
 	public static void main(String[] args) {
 		String sep = System.getProperty("file.separator");
 		String saveDir = System.getProperty("user.home") + sep+"tmp"+sep+"bumble"+sep+"complete";
-		NeuralNet network = usingTrainingData("./test-data/iris.csv")
-							 				.havingLayers(4, 4, 3)
-							 				.savingProgress(saveDir)
-							 				.savingWhenComplete(saveDir)
-							 				.train(true);
+		usingTrainingData("./test-data/iris.csv")
+			.havingLayers(4, 4, 3)
+			.savingProgress(saveDir)
+			.savingWhenComplete(saveDir)
+			.train(true).getNetwork();
 	}
 
 }

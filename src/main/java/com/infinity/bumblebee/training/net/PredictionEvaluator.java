@@ -10,7 +10,9 @@ import com.infinity.bumblebee.network.NeuralNet;
  */
 public class PredictionEvaluator {
 
-	private int answerCorrect = 0;
+	private int truePositives = 0;
+	private int falsePositives = 0;
+	private int falseNegatives = 0;
 	private int aswersAttempted = 0;
 
 	/**
@@ -29,9 +31,13 @@ public class PredictionEvaluator {
 			//TODO: need to implement for multiple outputs also
 			BumbleMatrix answer = net.calculate(oneInput);
 			if (answer.getEntry(0, 0) >= .5 && output.getEntry(row, 0) > 0.99) {
-				answerCorrect++;
+				truePositives++;
 			} else if (answer.getEntry(0, 0) < .5 && output.getEntry(row, 0) < 0.01) {
-				answerCorrect++;
+				truePositives++;
+			} else if (answer.getEntry(0, 0) >= .5 && output.getEntry(row, 0) < 0.99) {
+				falsePositives++;
+			} else if (answer.getEntry(0, 0) < .5 && output.getEntry(row, 0) > 0.01) {
+				falseNegatives++;
 			}
 			
 			aswersAttempted++;
@@ -43,7 +49,28 @@ public class PredictionEvaluator {
 	 * @return A straight percentage of predictions that were correct
 	 */
 	public double getPercentageCorrect() {
-		return ((double) answerCorrect / (double) aswersAttempted) * 100;
+		return ((double) truePositives / (double) aswersAttempted) * 100;
 	}
 	
+	/**
+	 * Gives the precision of the network.  True Positives / (True Positives + False Positives)
+	 * @return The precision of the network
+	 */
+	public double getPrecision() {
+		return truePositives / (truePositives + falsePositives);
+	}
+	
+	/**
+	 * Gives the recall of the network.  True Positives / (True Positives + False Negatives)
+	 * @return The recall of the network
+	 */
+	public double getRecall() {
+		return truePositives / (truePositives + falseNegatives);
+	}
+	
+	public double getF1() {
+		double precision = getPrecision();
+		double recall = getRecall();
+		return 2 * ((precision * recall) / (precision + recall));
+	}
 }

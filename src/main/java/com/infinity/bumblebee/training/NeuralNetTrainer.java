@@ -178,6 +178,7 @@ public class NeuralNetTrainer {
 		myOnes.fill(1d);
 		
 		LOGGER.fine("Starting forward propagation");
+		CostCalculation costCalculation = new GeneralCostCalculation();
 		
 		double sumForM = 0;
 		for (int i = 0; i < m; i++) {
