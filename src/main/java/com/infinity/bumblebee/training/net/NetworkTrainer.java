@@ -176,31 +176,34 @@ public class NetworkTrainer {
 			}
 		}
 		
-		for (int row = numTraining; row < numTesting + numTraining; row++) {
+//		int trainingInputRowIndex = 0;
+//		int trainingOutputRowIndex = 0;
+//		for (int row = numTraining; row < numTesting + numTraining - 1; row++) {
+		for (int row = 0; row < numTesting; row++) {
 			// set input data
-			TrainingEntry trainingEntry = entries.get(row);
-			int inputRowIndex = 0;
+			TrainingEntry trainingEntry = entries.get(row + numTraining);
 			for (int column = 0; column < input.getColumnDimension(); column++) {
-				testingData.setEntry(inputRowIndex++, column, trainingEntry.getInput()[column]);
+				double value = trainingEntry.getInput()[column];
+				testingData.setEntry(row, column, value);
 			}
 			// set output data
-			int outputRowIndex = 0;
 			for (int column = 0; column < out.getColumnDimension(); column++) {
-				testingOutputData.setEntry(outputRowIndex++, column, trainingEntry.getOutput()[column]);
+				testingOutputData.setEntry(row, column, trainingEntry.getOutput()[column]);
 			}
 		}
 		
-		for (int row = numTraining + numTesting; row < numCross + numTesting + numTraining; row++) {
+//		int crossValidationInputRowIndex = 0;
+//		int crossValidationOutputRowIndex = 0;
+//		for (int row = numTraining + numTesting; row < numCross + numTesting + numTraining - 1; row++) {
+		for (int row = 0; row < numCross; row++) {
 			// set input data
-			TrainingEntry trainingEntry = entries.get(row);
-			int inputRowIndex = 0;
+			TrainingEntry trainingEntry = entries.get(row + numTesting + numTraining);
 			for (int column = 0; column < input.getColumnDimension(); column++) {
-				crossValidationData.setEntry(inputRowIndex++, column, trainingEntry.getInput()[column]);
+				crossValidationData.setEntry(row, column, trainingEntry.getInput()[column]);
 			}
 			// set output data
-			int outputRowIndex = 0;
 			for (int column = 0; column < out.getColumnDimension(); column++) {
-				crossValidationOutputData.setEntry(outputRowIndex++, column, trainingEntry.getOutput()[column]);
+				crossValidationOutputData.setEntry(row, column, trainingEntry.getOutput()[column]);
 			}
 		}
 	}

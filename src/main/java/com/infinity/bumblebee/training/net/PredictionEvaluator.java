@@ -11,9 +11,11 @@ import com.infinity.bumblebee.network.NeuralNet;
 public class PredictionEvaluator {
 
 	private int truePositives = 0;
+	private int trueNegatives = 0;
 	private int falsePositives = 0;
 	private int falseNegatives = 0;
 	private int aswersAttempted = 0;
+	private double cost = 0;
 
 	/**
 	 * Constructor that performs evaluation
@@ -23,25 +25,33 @@ public class PredictionEvaluator {
 	 */
 	public PredictionEvaluator(BumbleMatrix input, BumbleMatrix output, NeuralNet net) {
 		final BumbleMatrixFactory factory = new BumbleMatrixFactory();
+		double distance = 0;
 		
-		for (int row = 0; row < input.getRowDimension(); row++) {
+		int m = input.getRowDimension();
+		for (int row = 0; row < m; row++) {
 			double[] inputArray = input.getRow(row);
 			BumbleMatrix oneInput = factory.createMatrix(new double[][]{inputArray});
 			
 			//TODO: need to implement for multiple outputs also
 			BumbleMatrix answer = net.calculate(oneInput);
-			if (answer.getEntry(0, 0) >= .5 && output.getEntry(row, 0) > 0.99) {
+			double guess = answer.getEntry(0, 0);
+			double correct = output.getEntry(row, 0);
+			if (guess >= .5 && correct >= 0.5) {
 				truePositives++;
-			} else if (answer.getEntry(0, 0) < .5 && output.getEntry(row, 0) < 0.01) {
-				truePositives++;
-			} else if (answer.getEntry(0, 0) >= .5 && output.getEntry(row, 0) < 0.99) {
+			} else if (guess < .5 && correct < 0.5) {
+				trueNegatives++;
+			} else if (guess >= .5 && correct <= 0.5) {
 				falsePositives++;
-			} else if (answer.getEntry(0, 0) < .5 && output.getEntry(row, 0) > 0.01) {
+			} else if (guess < .5 && correct > 0.5) {
 				falseNegatives++;
 			}
 			
+			distance += (guess - correct) * (guess - correct);
+			
 			aswersAttempted++;
 		}
+		
+		cost = distance / (2 * m);
 	}
 
 	/**
@@ -49,7 +59,7 @@ public class PredictionEvaluator {
 	 * @return A straight percentage of predictions that were correct
 	 */
 	public double getPercentageCorrect() {
-		return ((double) truePositives / (double) aswersAttempted) * 100;
+		return ((double) (truePositives + trueNegatives) / (double) aswersAttempted) * 100;
 	}
 	
 	/**
@@ -73,4 +83,9 @@ public class PredictionEvaluator {
 		double recall = getRecall();
 		return 2 * ((precision * recall) / (precision + recall));
 	}
+
+	public double getCost() {
+		return cost;
+	}
+
 }

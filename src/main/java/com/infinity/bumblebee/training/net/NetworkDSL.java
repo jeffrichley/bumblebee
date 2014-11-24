@@ -22,7 +22,7 @@ public class NetworkDSL {
 	private NetworkTrainerConfiguration configuration = new NetworkTrainerConfiguration();
 	
 	private NetworkDSL() { 
-		configuration.setMaxTrainingIterations(100);
+		configuration.setMaxTrainingIterations(Integer.MAX_VALUE);
 		configuration.setLambda(0.3);
 	}
 	
@@ -185,6 +185,9 @@ public class NetworkDSL {
 			
 			TrainingResult result = new TrainingResult();
 			result.setNetwork(network);
+			result.setTrainingSize(trainer.getInputData().getRowDimension());
+			result.setTestingSize(trainer.getTestingData().getRowDimension());
+			result.setCrossValidationSize(trainer.getCrossValidationData().getRowDimension());
 			
 			if (configuration.getCompleteSaveDirectory() != null) {
 				BumbleMatrixMarshaller marshaller = new BumbleMatrixMarshaller();
@@ -204,6 +207,7 @@ public class NetworkDSL {
 				result.setCrossValidationPrecision(evaluator.getPrecision());
 				result.setCrossValidationRecall(evaluator.getRecall());
 				result.setCrossValidationF1(evaluator.getF1());
+				result.setCrossValidationCost(evaluator.getCost());
 				
 				System.out.println("Final percentage correct: " + evaluator.getPercentageCorrect());
 			}
@@ -216,6 +220,7 @@ public class NetworkDSL {
 				result.setTestPrecision(testingEvaluator.getPrecision());
 				result.setTestRecall(testingEvaluator.getRecall());
 				result.setTestF1(testingEvaluator.getF1());
+				result.setTestCost(testingEvaluator.getCost());
 			}
 			
 			BumbleMatrix trainingInput = trainer.getInputData();
@@ -225,6 +230,43 @@ public class NetworkDSL {
 			result.setTrainingPrecision(trainingEvaluator.getPrecision());
 			result.setTrainingRecall(trainingEvaluator.getRecall());
 			result.setTrainingF1(trainingEvaluator.getF1());
+			result.setTrainingCost(trainingEvaluator.getCost());
+			
+			if (verbose) {
+				System.out.println("Training is complete, the following are statistics about the result...");
+				
+				System.out.println("----------------------------------------------------------------------");
+				System.out.println("Size:");
+				System.out.println("\tTraining Set: " + result.getTrainingSize());
+				System.out.println("\tTesting Set: " + result.getTestingSize());
+				System.out.println("\tCross Validation Set: " + result.getCrossValidationSize());
+				
+				System.out.println("----------------------------------------------------------------------");
+				System.out.println("Traing Set:");
+				System.out.println("\tPercent Correct: " + result.getTrainingPercent() + "%");
+				System.out.println("\tPrecision: " + result.getTrainingPrecision());
+				System.out.println("\tRecall: " + result.getTrainingRecall());
+				System.out.println("\tF1: " + result.getTrainingF1());
+				System.out.println("\tCost: " + result.getTrainingCost());
+				
+				System.out.println("----------------------------------------------------------------------");
+				System.out.println("Test Set:");
+				System.out.println("\tPercent Correct: " + result.getTestPercent() + "%");
+				System.out.println("\tPrecision: " + result.getTestPrecision());
+				System.out.println("\tRecall: " + result.getTestRecall());
+				System.out.println("\tF1: " + result.getTestF1());
+				System.out.println("\tCost: " + result.getTestCost());
+				
+				System.out.println("----------------------------------------------------------------------");
+				System.out.println("Cross Validation Set:");
+				System.out.println("\tPercent Correct: " + result.getCrossValidationPercent() + "%");
+				System.out.println("\tPrecision: " + result.getCrossValidationPrecision());
+				System.out.println("\tRecall: " + result.getCrossValidationRecall());
+				System.out.println("\tF1: " + result.getCrossValidationF1());
+				System.out.println("\tCost: " + result.getCrossValidationCost());
+				
+				System.out.println("----------------------------------------------------------------------");
+			}
 			
 			return result;
 		}

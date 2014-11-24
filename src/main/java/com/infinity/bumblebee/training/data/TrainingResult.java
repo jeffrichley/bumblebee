@@ -6,6 +6,10 @@ public class TrainingResult {
 
 	private NeuralNet network;
 	
+	private int trainingSize;
+	private int testingSize;
+	private int crossValidationSize;
+	
 	private double trainingCost;
 	private double trainingPercent;
 	private double trainingPrecision;
@@ -150,6 +154,30 @@ public class TrainingResult {
 
 	public void setCrossValidationF1(double crossValidationF1) {
 		this.crossValidationF1 = crossValidationF1;
+	}
+
+	public int getTrainingSize() {
+		return trainingSize;
+	}
+
+	public void setTrainingSize(int trainingSize) {
+		this.trainingSize = trainingSize;
+	}
+
+	public int getTestingSize() {
+		return testingSize;
+	}
+
+	public void setTestingSize(int testingSize) {
+		this.testingSize = testingSize;
+	}
+
+	public int getCrossValidationSize() {
+		return crossValidationSize;
+	}
+
+	public void setCrossValidationSize(int crossValidationSize) {
+		this.crossValidationSize = crossValidationSize;
 	}
 	
 }
