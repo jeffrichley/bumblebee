@@ -6,12 +6,17 @@ import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.junit.Test;
 
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.network.NeuralNet;
 import com.infinity.bumblebee.training.net.NetworkDSL.NetworkDSLTrainer;
+import com.infinity.bumblebee.util.BumbleMatrixMarshaller;
 
 public class NetworkTrainerConfigurationTest {
 
@@ -63,6 +68,14 @@ public class NetworkTrainerConfigurationTest {
 		assertThat(network.predict(zeroInput).getAnswer(), is(equalTo(0)));
 		assertThat(network.predict(oneInput).getAnswer(), is(equalTo(1)));
 		assertThat(network.predict(twoInput).getAnswer(), is(equalTo(2)));
+		
+		BumbleMatrixMarshaller bmm = new BumbleMatrixMarshaller();
+		try {
+			bmm.marshal(network, new FileWriter(new File("iris.network")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test

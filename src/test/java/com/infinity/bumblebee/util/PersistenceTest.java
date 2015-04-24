@@ -5,6 +5,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.assertThat;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -44,7 +48,6 @@ public class PersistenceTest {
 	public void ensureSavesAndLoads() {
 		StringWriter saved = new StringWriter();
 		marshaller.marshal(network, saved);
-		System.out.println(saved.toString());
 
 		NeuralNet readNetwork = unmarshaller.unmarshal(new StringReader(saved.toString()));
 		
@@ -75,4 +78,12 @@ public class PersistenceTest {
 		assertThat(theta2.getEntry(2, 2), is(closeTo(13, 0)));
 	}
 
+	@Test
+	public void ensureLoadsFromMultipleFiles() throws FileNotFoundException {
+		Reader theta1Reader = new FileReader(new File("./test-data/Theta1.csv"));
+		Reader theta2Reader = new FileReader(new File("./test-data/Theta2.csv"));
+		NeuralNet readNetwork = unmarshaller.unmarshalMutilFiles(theta1Reader, theta2Reader);
+		
+		
+	}
 }

@@ -1,13 +1,24 @@
 package com.infinity.bumblebee.training.net;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
+import com.google.gson.Gson;
 import com.infinity.bumblebee.data.BumbleMatrix;
 import com.infinity.bumblebee.data.BumbleMatrixFactory;
+import com.infinity.bumblebee.data.MTJMatrix;
 import com.infinity.bumblebee.data.MatrixTuple;
 import com.infinity.bumblebee.exceptions.BumbleException;
 import com.infinity.bumblebee.math.CostFunction;
@@ -21,6 +32,7 @@ import com.infinity.bumblebee.training.NeuralNetTrainerCostFunction;
 import com.infinity.bumblebee.training.StochasticGradientDecentTrainingDataProvider;
 import com.infinity.bumblebee.training.TrainingDataProvider;
 import com.infinity.bumblebee.training.data.TrainingEntry;
+import com.infinity.bumblebee.util.BumbleMatrixMarshaller;
 import com.infinity.bumblebee.util.BumbleMatrixUnmarshaller;
 import com.infinity.bumblebee.util.BumbleMatrixUtils;
 import com.infinity.bumblebee.util.MathBridge;
@@ -68,8 +80,26 @@ public class NetworkTrainer {
 		if (verbose) {
 			System.out.print("Loading data...");
 		}
-		MatrixTuple tuple = new TrainingDataLoader().loadData(config);
-		setTrainingTestingAndCrossValidationData(tuple.getOne(), tuple.getTwo());
+		
+		if (config.getTrainingGroupsFile() == null) {
+			MatrixTuple tuple = new TrainingDataLoader().loadData(config);
+			BumbleMatrix input = tuple.getOne();
+			BumbleMatrix output = tuple.getTwo();
+			
+			if (config.getNormalizationMethod() != null) {
+				if (verbose) {
+					System.out.print("Normalizing data...");
+				}
+				input = config.getNormalizationMethod().normalize(input);
+			}
+			
+			setTrainingTestingAndCrossValidationData(input, output);
+			if (config.getTrainingDataSaveFile() != null) {
+				saveTrainingData(config.getTrainingDataSaveFile());
+			}
+		} else {
+			setTrainingTestingAndCrossValidationData(config.getTrainingGroupsFile());
+		}
 		
 		if (verbose) {
 			long end = System.currentTimeMillis();
@@ -140,6 +170,66 @@ public class NetworkTrainer {
 		NeuralNet net = new NeuralNet(ts);
 		
 		return net;
+	}
+
+	private void saveTrainingData(String trainingDataSaveFile) {
+		Gson gson = new Gson();
+		try (FileOutputStream fos = new FileOutputStream(trainingDataSaveFile);
+			 BufferedOutputStream bos = new BufferedOutputStream(fos);
+			 ZipOutputStream zos = new ZipOutputStream(bos);) {
+			
+			zos.putNextEntry(new ZipEntry("trainingData.json"));
+	        String json = gson.toJson(trainingData, MTJMatrix.class);
+			zos.write(json.getBytes());
+			zos.closeEntry();
+			
+			zos.putNextEntry(new ZipEntry("testingData.json"));
+	        zos.write(gson.toJson(testingData, MTJMatrix.class).getBytes());
+			zos.closeEntry();
+			
+			zos.putNextEntry(new ZipEntry("crossValidationData.json"));
+	        zos.write(gson.toJson(crossValidationData, MTJMatrix.class).getBytes());
+			zos.closeEntry();
+			
+			zos.putNextEntry(new ZipEntry("trainingOutputData.json"));
+	        zos.write(gson.toJson(trainingOutputData, MTJMatrix.class).getBytes());
+			zos.closeEntry();
+			
+			zos.putNextEntry(new ZipEntry("testingOutputData.json"));
+	        zos.write(gson.toJson(testingOutputData, MTJMatrix.class).getBytes());
+			zos.closeEntry();
+			
+			zos.putNextEntry(new ZipEntry("crossValidationOutputData.json"));
+	        zos.write(gson.toJson(crossValidationOutputData, MTJMatrix.class).getBytes());
+			zos.closeEntry();
+		} catch (IOException e) {
+			throw new BumbleException("Unable to save training data: " + trainingDataSaveFile, e);
+		}
+	}
+
+	private void setTrainingTestingAndCrossValidationData(String trainingGroupsFile) {
+		Gson gson = new Gson();
+		
+		try (FileInputStream fin = new FileInputStream(trainingGroupsFile);
+	         ZipInputStream zin = new ZipInputStream(fin);) {
+			
+			trainingData = gson.fromJson(getNextEntryAsString(zin), MTJMatrix.class);
+			testingData = gson.fromJson(getNextEntryAsString(zin), MTJMatrix.class);
+			crossValidationData = gson.fromJson(getNextEntryAsString(zin), MTJMatrix.class);
+			trainingOutputData = gson.fromJson(getNextEntryAsString(zin), MTJMatrix.class);
+			testingOutputData = gson.fromJson(getNextEntryAsString(zin), MTJMatrix.class);
+			crossValidationOutputData = gson.fromJson(getNextEntryAsString(zin), MTJMatrix.class);
+		} catch (IOException e) {
+			throw new BumbleException("Unable to read training configuration: " + trainingGroupsFile, e);
+		}
+	}
+	
+	private String getNextEntryAsString(ZipInputStream zin) throws IOException {
+		zin.getNextEntry();
+		BufferedReader in = new BufferedReader(new InputStreamReader(zin));
+		String data = in.readLine();
+		zin.closeEntry();
+		return data;
 	}
 
 	private void setTrainingTestingAndCrossValidationData(BumbleMatrix input, BumbleMatrix out) {

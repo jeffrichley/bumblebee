@@ -68,6 +68,17 @@ public class BumbleMatrixUtilsTest {
 		assertThat(addition.getEntry(0, 0), is(equalTo(3d)));
 		assertThat(addition.getEntry(0, 1), is(equalTo(6d)));
 	}
+	
+	@Test
+	public void ensureElementwiseDivision() {
+		BumbleMatrix one = new BumbleMatrixFactory().createMatrix(new double[][]{{10, 4}});
+		BumbleMatrix two = new BumbleMatrixFactory().createMatrix(new double[][]{{5, 2}});
+		
+		BumbleMatrix division = cut.elementWiseDivision(one, two);
+		
+		assertThat(division.getEntry(0, 0), is(equalTo(2d)));
+		assertThat(division.getEntry(0, 1), is(equalTo(2d)));
+	}
 
 	@Test
 	public void ensureScalarDivide() {
@@ -207,6 +218,6 @@ public class BumbleMatrixUtilsTest {
 		assertThat(reshapes.get(1).getEntry(0, 1), is(equalTo(6d)));
 		assertThat(reshapes.get(1).getEntry(1, 0), is(equalTo(7d)));
 		assertThat(reshapes.get(1).getEntry(1, 1), is(equalTo(8d)));
-
 	}
+	
 }

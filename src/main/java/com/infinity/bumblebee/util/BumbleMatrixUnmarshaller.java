@@ -48,4 +48,8 @@ public class BumbleMatrixUnmarshaller {
 		return new NeuralNet(thetas);
 	}
 
+	public NeuralNet unmarshalMutilFiles(Reader... theta1Reader) {
+		return null;
+	}
+
 }

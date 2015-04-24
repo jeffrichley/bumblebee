@@ -22,13 +22,19 @@ public class NetworkDSL {
 	private NetworkTrainerConfiguration configuration = new NetworkTrainerConfiguration();
 	
 	private NetworkDSL() { 
-		configuration.setMaxTrainingIterations(Integer.MAX_VALUE);
+		configuration.setMaxTrainingIterations(100);
 		configuration.setLambda(0.3);
 	}
 	
 	public static NetworkDSL usingTrainingData(String fileName) {
 		NetworkDSL dsl = new NetworkDSL();
 		dsl.configuration.setTestDataFileName(fileName);
+		return dsl;
+	}
+	
+	public static NetworkDSL usingPreviousTrainingFile(String fileName) {
+		NetworkDSL dsl = new NetworkDSL();
+		dsl.configuration.setTrainingGroupsFile(fileName);
 		return dsl;
 	}
 	
@@ -290,9 +296,19 @@ public class NetworkDSL {
 			configuration.setTrainingDataProviderType(trainingDataProviderType);
 			return this;
 		}
+		
+		public NetworkDSLTrainer withNormalizerMethod(NormalizerMethod method) {
+			configuration.setNormalizationMethod(method);
+			return this;
+		}
 
 		public NetworkDSLTrainer withPercentageForCrossValidation(double percentage) {
 			configuration.setPercentageForCrossValidation(percentage);
+			return this;
+		}
+
+		public NetworkDSLTrainer savingTrainingAs(String saveFile) {
+			configuration.setTrainingDataSaveFile(saveFile);
 			return this;
 		}
 

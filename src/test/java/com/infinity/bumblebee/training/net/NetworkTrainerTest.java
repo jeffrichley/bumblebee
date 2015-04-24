@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import java.io.StringWriter;
 import java.util.List;
 
 import org.junit.Before;
@@ -16,6 +17,7 @@ import com.infinity.bumblebee.data.BumbleMatrixFactory;
 import com.infinity.bumblebee.network.NeuralNet;
 import com.infinity.bumblebee.network.Prediction;
 import com.infinity.bumblebee.training.NeuralNetTrainer;
+import com.infinity.bumblebee.util.BumbleMatrixMarshaller;
 
 public class NetworkTrainerTest {
 
@@ -62,6 +64,15 @@ public class NetworkTrainerTest {
 	@Test
 	public void ensureCanTrain() {
 		NeuralNet network = cut.train(false);
+		List<BumbleMatrix> thetas = network.getThetas();
+		
+		System.out.println(thetas.get(0).getRowDimension() + " " + thetas.get(0).getColumnDimension());
+		System.out.println(thetas.get(1).getRowDimension() + " " + thetas.get(1).getColumnDimension());
+		StringWriter out = new StringWriter();
+		new BumbleMatrixMarshaller().marshal(cut.getCurrentNetwork(), out);
+		System.out.println(out);
+		
+		
 
 		assertThat(network, is(notNullValue()));
 

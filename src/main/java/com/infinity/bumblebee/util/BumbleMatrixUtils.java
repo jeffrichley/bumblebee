@@ -252,4 +252,24 @@ public class BumbleMatrixUtils {
 		return ms;
 	}
 
+	/**
+	 * Each element in one is divided by the corresponding element in two
+	 * @param one Numerator matrix
+	 * @param two Denominator matrix
+	 * @return A new matrix with the division results
+	 */
+	public BumbleMatrix elementWiseDivision(BumbleMatrix one, BumbleMatrix two) {
+		BumbleMatrix matrix = new BumbleMatrixFactory().createMatrix(one.getRowDimension(), one.getColumnDimension());
+		
+		for (int i = 0; i < one.getRowDimension(); i++) {
+			for (int j = 0; j < one.getColumnDimension(); j++) {
+				double oneVal = one.getEntry(i, j);
+				double twoVal = two.getEntry(i, j);
+				matrix.setEntry(i, j, oneVal / twoVal);
+			}
+		}
+		
+		return matrix;
+	}
+
 }

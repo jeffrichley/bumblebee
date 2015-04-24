@@ -6,13 +6,15 @@ import java.util.Arrays;
 public class NetworkTrainerConfiguration {
 
 	private String previousTrainingFile;
+	private String trainingGroupsFile;
+	private String trainingDataSaveFile;
 	private String testDataFileName;
 	private String progressReportFileName;
 	private int columnsOfInputs;
 	private int columnsOfExpectedOuputs;
 	private int[] layers;
 	private double lambda;
-	private int maxTrainingIterations;
+	private int maxTrainingIterations = 100;
 	private File progressSaveDirectory;
 	private File completeSaveDirectory;
 	private double percentageForTraining = 1;
@@ -20,6 +22,7 @@ public class NetworkTrainerConfiguration {
 	private double percentageForCrossValidation = 0;
 	private int testingEveryNumberOfIterations = Integer.MAX_VALUE;
 	private TrainingDataProviderType trainingDataProviderType = TrainingDataProviderType.GRADIENT_DECENT;
+	private NormalizerMethod normalizationMethod;
 
 	public enum TrainingDataProviderType {
 		GRADIENT_DECENT, STOCHASTIC_GRADIENT_DECENT
@@ -154,6 +157,30 @@ public class NetworkTrainerConfiguration {
 
 	void setPercentageForCrossValidation(double percentageForCrossValidation) {
 		this.percentageForCrossValidation = percentageForCrossValidation;
+	}
+
+	public String getTrainingDataSaveFile() {
+		return trainingDataSaveFile;
+	}
+
+	public void setTrainingDataSaveFile(String trainingDataSaveFile) {
+		this.trainingDataSaveFile = trainingDataSaveFile;
+	}
+
+	public String getTrainingGroupsFile() {
+		return trainingGroupsFile;
+	}
+
+	public void setTrainingGroupsFile(String trainingGroupsFile) {
+		this.trainingGroupsFile = trainingGroupsFile;
+	}
+
+	public NormalizerMethod getNormalizationMethod() {
+		return normalizationMethod;
+	}
+
+	public void setNormalizationMethod(NormalizerMethod normalizationMethod) {
+		this.normalizationMethod = normalizationMethod;
 	}
 
 }
